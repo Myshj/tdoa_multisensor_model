@@ -1,0 +1,200 @@
+{
+  "0": {
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "heartbeat_interval": 10
+  },
+  "1": {
+    "position": [
+      100,
+      0,
+      0
+    ],
+    "heartbeat_interval": 10
+  },
+  "2": {
+    "position": [
+      200,
+      0,
+      0
+    ],
+    "heartbeat_interval": 10
+  },
+  "3": {
+    "position": [
+      300,
+      0,
+      0
+    ],
+    "heartbeat_interval": 10
+  },
+  "4": {
+    "position": [
+      50,
+      50,
+      0
+    ],
+    "heartbeat_interval": 10
+  },
+  "5": {
+    "position": [
+      150,
+      50,
+      0
+    ],
+    "heartbeat_interval": 10
+  },
+  "6": {
+    "position": [
+      250,
+      50,
+      0
+    ],
+    "heartbeat_interval": 10
+  },
+  "7": {
+    "position": [
+      0,
+      100,
+      0
+    ]
+  },
+  "8": {
+    "position": [
+      100,
+      100,
+      0
+    ],
+    "heartbeat_interval": 10
+  },
+  "9": {
+    "position": [
+      200,
+      100,
+      0
+    ]
+  },
+  "10": {
+    "position": [
+      300,
+      100,
+      0
+    ],
+    "heartbeat_interval": 10
+  },
+  "11": {
+    "position": [
+      50,
+      150,
+      0
+    ],
+    "heartbeat_interval": 10
+  },
+  "12": {
+    "position": [
+      150,
+      150,
+      0
+    ],
+    "heartbeat_interval": 10
+  },
+  "13": {
+    "position": [
+      250,
+      150,
+      0
+    ],
+    "heartbeat_interval": 10
+  },
+  "14": {
+    "position": [
+      0,
+      200,
+      0
+    ],
+    "heartbeat_interval": 10
+  },
+  "15": {
+    "position": [
+      100,
+      200,
+      0
+    ],
+    "heartbeat_interval": 10
+  },
+  "16": {
+    "position": [
+      200,
+      200,
+      0
+    ],
+    "heartbeat_interval": 10
+  },
+  "17": {
+    "position": [
+      300,
+      200,
+      0
+    ],
+    "heartbeat_interval": 10
+  },
+  "18": {
+    "position": [
+      50,
+      250,
+      0
+    ],
+    "heartbeat_interval": 10
+  },
+  "19": {
+    "position": [
+      150,
+      250,
+      0
+    ],
+    "heartbeat_interval": 10
+  },
+  "20": {
+    "position": [
+      250,
+      250,
+      0
+    ],
+    "heartbeat_interval": 10
+  },
+  "21": {
+    "position": [
+      0,
+      300,
+      0
+    ],
+    "heartbeat_interval": 10
+  },
+  "22": {
+    "position": [
+      100,
+      300,
+      0
+    ],
+    "heartbeat_interval": 10
+  },
+  "23": {
+    "position": [
+      200,
+      300,
+      0
+    ],
+    "heartbeat_interval": 10
+  },
+  "24": {
+    "position": [
+      300,
+      300,
+      0
+    ],
+    "heartbeat_interval": 10
+  }
+}
