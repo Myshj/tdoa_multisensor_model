@@ -1,14 +1,11 @@
 import itertools
 
-from ASensor import ASensor
+from shapely.geometry import MultiPoint
+from shapely.ops import cascaded_union
+
 from ActorSystem import Actor
 from ActorSystem.Messages import Message
 from Messages import FormGroups
-
-import shapely
-from shapely.ops import cascaded_union, unary_union
-
-from shapely.geometry import MultiPoint
 
 
 class ASensorGroupFormer(Actor):

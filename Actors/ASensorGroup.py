@@ -1,9 +1,10 @@
 import gevent
 from numpy.linalg import norm
+
 import ActorSystem.Messages
 import Messages
-from ALocator import ALocator
 from ActorSystem import Actor
+from Actors.ALocator import ALocator
 
 
 class ASensorGroup(Actor):

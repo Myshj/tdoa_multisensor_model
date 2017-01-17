@@ -1,7 +1,7 @@
 # -*- coding: utf-8
 import Messages
-from ASignalPropagator import ASignalPropagator
 from ActorSystem import Actor
+from Actors.ASignalPropagator import ASignalPropagator
 
 
 class ASignalSource(Actor):

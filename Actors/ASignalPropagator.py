@@ -6,8 +6,8 @@ from numpy.linalg import norm
 
 import ActorSystem.Messages
 import Messages
-from ASensor import ASensor
 from ActorSystem import Actor
+from Actors.ASensor import ASensor
 
 
 class ASignalPropagator(Actor):

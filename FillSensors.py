@@ -1,6 +1,6 @@
 from shapely.geometry import Point
 
-from ASensor import ASensor
+from Actors.ASensor import ASensor
 
 sensors = [
     ASensor(

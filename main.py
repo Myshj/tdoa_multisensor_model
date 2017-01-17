@@ -1,10 +1,9 @@
 import json
-import gevent
 
+import gevent
 from shapely.geometry import Point
 
-from AModel import AModel
-
+from Actors.AModel import AModel
 from FillSensors import sensors
 
 if __name__ == '__main__':

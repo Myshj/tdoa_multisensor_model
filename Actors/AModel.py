@@ -1,15 +1,15 @@
 # -*- coding: utf-8
-import numpy
 import gevent
-import Messages
-import ActorSystem.Messages
-from ASensor import ASensor
-from ASensorGroup import ASensorGroup
+import numpy
+from ASensorGroupFormer import ASensorGroupFormer
 from ASensorSupervisor import ASensorSupervisor
 from ASignalPropagator import ASignalPropagator
 from ASignalSource import ASignalSource
-from ASensorGroupFormer import ASensorGroupFormer
+
+import ActorSystem.Messages
+import Messages
 from ActorSystem import Actor
+from Actors.ASensorGroup import ASensorGroup
 
 
 class AModel(Actor):
