@@ -1,9 +1,9 @@
-from ActorSystem.Messages import Message
+from .Base import Base
 from ActorSystem import Actor
 from collections import Iterable
 
 
-class FormGroups(Message):
+class FormGroups(Base):
     """
     Сообщение о том, что из списка сенсоров нужно сформировать группы.
     """

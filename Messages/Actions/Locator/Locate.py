@@ -1,9 +1,9 @@
-from ActorSystem.Messages import Message
+from .Base import Base
 from ActorSystem import Actor
 from collections import Iterable
 
 
-class Locate(Message):
+class Locate(Base):
     """
     Сообщение о том, что нужно вычислить положение объекта на основании задержек прихода сигнала от него.
     """
