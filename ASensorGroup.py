@@ -40,9 +40,9 @@ class ASensorGroup(Actor):
         self._listen_for_sensor_signals()
 
     def on_message(self, message):
-        if isinstance(message, Messages.SignalReceived):
+        if isinstance(message, Messages.ReportAboutReceiving):
             self._on_received_signal(
-                when_received=message.when_signal_received,
+                when_received=message.when,
                 sender=message.sensor
             )
 

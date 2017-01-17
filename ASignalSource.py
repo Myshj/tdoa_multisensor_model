@@ -21,5 +21,5 @@ class ASignalSource(Actor):
         self._signal_propagator = signal_propagator
 
     def on_message(self, message):
-        if isinstance(message, Messages.SignalSourceSendSignal):
-            self._signal_propagator.tell(Messages.PropagateSignal(self, self.position))
+        if isinstance(message, Messages.GenerateSignal):
+            self._signal_propagator.tell(Messages.Propagate(self, self.position))

@@ -1,10 +1,9 @@
 from gevent import Greenlet
 from gevent.queue import Queue
-
 from ActorSystem.Messages import Message
 
 
-class Actor(Greenlet):
+class Actor(object):
     """
     Базовый класс для всех акторов.
     """
@@ -13,12 +12,11 @@ class Actor(Greenlet):
         """
         Конструктор.
         """
-        super(Actor, self).__init__()
         self._inbox = Queue()
         self._running = False
         self.start()
 
-    def _run(self):
+    def start(self):
         """
         Запускает актора.
         :return:
@@ -26,9 +24,12 @@ class Actor(Greenlet):
         if not self._running:
             self._running = True
             self.on_started()
-            while self._running:
-                message = self._inbox.get()
-                self.on_message(message)
+            Greenlet.spawn(self._loop)
+
+    def _loop(self):
+        while self._running:
+            message = self._inbox.get()
+            self.on_message(message)
 
     def stop(self):
         """

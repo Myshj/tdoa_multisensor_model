@@ -25,25 +25,26 @@ class ASensorGroupFormer(Actor):
 
         sensor_to_figure_table = {
             sensor: sensor.position for sensor in sensors
-        }
+            }
 
         forms_from_combinations = {
             combination: MultiPoint([
-                sensor_to_figure_table[sensor] for sensor in combination
-            ]).convex_hull for combination in good_combinations
-        }
+                                        sensor_to_figure_table[sensor] for sensor in combination
+                                        ]).convex_hull for combination in good_combinations
+            }
 
         combinations_to_return = good_combinations.copy()
 
         for current_combination in good_combinations:
-            form_with_combination = cascaded_union([forms_from_combinations[combination] for combination in combinations_to_return])
+            form_with_combination = cascaded_union(
+                [forms_from_combinations[combination] for combination in combinations_to_return])
             temp_combinations = good_combinations.copy()
             temp_combinations.remove(current_combination)
-            form_without_combination = cascaded_union([forms_from_combinations[combination] for combination in temp_combinations])
+            form_without_combination = cascaded_union(
+                [forms_from_combinations[combination] for combination in temp_combinations])
 
             if form_without_combination.almost_equals(form_with_combination):
                 combinations_to_return.remove(current_combination)
-
 
         print(combinations_to_return)
 

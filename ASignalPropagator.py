@@ -32,7 +32,7 @@ class ASignalPropagator(Actor):
     def on_message(self, message):
         if isinstance(message, ActorSystem.Messages.AddListener):
             self._sensors.append(message.listener)
-        elif isinstance(message, Messages.PropagateSignal):
+        elif isinstance(message, Messages.Propagate):
             when_signal_sent = datetime.datetime.now()
             self._sensors.sort(key=self._sorting_key)
             for signal_listener in self._sensors:
@@ -43,7 +43,7 @@ class ASignalPropagator(Actor):
 
                 gevent.spawn(self._send_message_to_listener_after_delay,
                              listener=signal_listener,
-                             message=Messages.ReceiveSignal(self, wake_datetime),
+                             message=Messages.Receive(self, wake_datetime),
                              delay=delay_in_seconds
                              )
 

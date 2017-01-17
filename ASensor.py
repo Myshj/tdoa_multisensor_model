@@ -25,15 +25,17 @@ class ASensor(Actor):
         self.heartbeat_interval = heartbeat_interval
         self.radius = radius
         self._state = 'ok'
+
     def __str__(self):
         return "position:{0}".format(self.position)
+
     def __repr__(self):
         return "position:{0}".format(self.position)
 
     def on_message(self, message):
-        if isinstance(message, Messages.ReceiveSignal):
+        if isinstance(message, Messages.Receive):
             self.signal_received_broadcaster.tell(
-                ActorSystem.Messages.Broadcast(self, Messages.SignalReceived(self, message.when_signal_received, self))
+                ActorSystem.Messages.Broadcast(self, Messages.ReportAboutReceiving(self, message.when, self))
             )
 
     def on_started(self):
@@ -44,5 +46,5 @@ class ASensor(Actor):
 
     def _heartbeat_cycle(self):
         while self._running and self._state == 'ok':
-            self.alive_broadcaster.tell(ActorSystem.Messages.Broadcast(self, Messages.Alive(self, who=self)))
+            self.alive_broadcaster.tell(ActorSystem.Messages.Broadcast(self, Messages.Alive(self, actor=self)))
             gevent.sleep(self.heartbeat_interval)

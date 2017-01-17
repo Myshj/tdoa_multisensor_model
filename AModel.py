@@ -64,7 +64,7 @@ class AModel(Actor):
     def _initialize_signal_source(self):
         self._signal_source = ASignalSource(position=AModel.list_to_vector((7, 7, 0)),
                                             signal_propagator=self._signal_propagator)
-        self._signal_source.tell(Messages.SignalSourceSendSignal(self))
+        self._signal_source.tell(Messages.GenerateSignal(self))
 
     def _initialize_sensor_supervisor(self):
         self._sensor_supervisor = ASensorSupervisor(self._sensor_actors)

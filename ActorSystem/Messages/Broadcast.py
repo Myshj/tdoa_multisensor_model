@@ -1,7 +1,17 @@
 from .Message import Message
+from ActorSystem import Actor
 
 
 class Broadcast(Message):
-    def __init__(self, sender, message_to_broadcast: Message):
-        super(Broadcast, self).__init__(sender)
-        self.message_to_broadcast = message_to_broadcast
+    """
+    Этим сообщением говорим, что нужно размножить вложенное сообщение.
+    """
+
+    def __init__(self, sender: Actor, message: Message):
+        """
+        Конструктор.
+        :param Actor sender: Адресант сообщения.
+        :param Message message: Сообщение для размножения.
+        """
+        super().__init__(sender)
+        self.message = message
