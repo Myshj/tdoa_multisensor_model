@@ -1,4 +1,4 @@
-from gevent import Greenlet
+import gevent
 from gevent.queue import Queue
 from ActorSystem.Messages import Message
 
@@ -24,7 +24,10 @@ class Actor(object):
         if not self._running:
             self._running = True
             self.on_started()
-            Greenlet.spawn(self._loop)
+            self._start_loop()
+
+    def _start_loop(self):
+        gevent.spawn(self._loop)
 
     def _loop(self):
         while self._running:

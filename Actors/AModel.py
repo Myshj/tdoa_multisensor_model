@@ -1,10 +1,10 @@
 # -*- coding: utf-8
 import gevent
 import numpy
-from ASensorGroupFormer import ASensorGroupFormer
-from ASensorSupervisor import ASensorSupervisor
-from ASignalPropagator import ASignalPropagator
-from ASignalSource import ASignalSource
+from .ASensorGroupFormer import ASensorGroupFormer
+from .ASensorSupervisor import ASensorSupervisor
+from .ASignalPropagator import ASignalPropagator
+from .ASignalSource import ASignalSource
 
 import ActorSystem.Messages
 import Messages
@@ -20,7 +20,7 @@ class AModel(Actor):
     def __init__(self, sensors, sensor_groups, speed_of_sound):
         """
         Конструктор.
-        :param list(ASensor) sensors: Список акторов-датчиков.
+        :param list(SoundSensor) sensors: Список акторов-датчиков.
         :param list(ASensorGroup)sensor_groups: Список акторов-групп датчиков.
         :param float speed_of_sound: Скорость звука в среде.
         """

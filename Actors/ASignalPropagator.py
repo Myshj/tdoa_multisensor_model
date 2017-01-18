@@ -7,7 +7,7 @@ from numpy.linalg import norm
 import ActorSystem.Messages
 import Messages
 from ActorSystem import Actor
-from Actors.ASensor import ASensor
+from Actors.Sensors.SoundSensor import SoundSensor
 
 
 class ASignalPropagator(Actor):
@@ -52,6 +52,6 @@ class ASignalPropagator(Actor):
         listener.tell(message)
 
     def _sorting_key(self, listener):
-        if not isinstance(listener, ASensor):
+        if not isinstance(listener, SoundSensor):
             return
         return norm(self._source_position - listener.position)

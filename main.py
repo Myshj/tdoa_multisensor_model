@@ -1,23 +1,15 @@
-import json
-
+import settings
+import Loaders
 import gevent
-from shapely.geometry import Point
-
-from Actors.AModel import AModel
-from FillSensors import sensors
+from ActorSystem.Messages import Message
 
 if __name__ == '__main__':
-    p = Point(10, 10)
-    print(p)
-    a = sensors
-    with open('sensors.json') as sensors_file:
-        sensors_raw = json.load(sensors_file)
-
-    with open('sensor_groups.json') as sensor_groups_file:
-        sensor_groups_raw = json.load(sensor_groups_file)
-
-    model = AModel(sensors=sensors,
-                   sensor_groups=sensor_groups_raw,
-                   speed_of_sound=340.29)
-    while not model.ended:
+    sensor_loader = Loaders.SensorLoader(settings.sensors_url, settings.credentials)
+    sensors = sensor_loader.load_all()
+    sensors[2].tell(Message(None))
+    sensors[2].tell(Message(None))
+    sensors[2].tell(Message(None))
+    sensors[2].tell(Message(None))
+    sensors[2].tell(Message(None))
+    while True:
         gevent.sleep(1)

@@ -29,7 +29,7 @@ class ASensorGroup(Actor):
     def __init__(self, sensors_actors, speed_of_sound):
         """
         Конструктор.
-        :param list(ASensor) sensors_actors: Список связанных акторов-датчиков.
+        :param list(SoundSensor) sensors_actors: Список связанных акторов-датчиков.
         :param float speed_of_sound: Скорость звука в среде.
         """
         super(ASensorGroup, self).__init__()
