@@ -1,15 +1,15 @@
 # -*- coding: utf-8
 import gevent
 import numpy
-from .ASensorGroupFormer import ASensorGroupFormer
-from .ASensorSupervisor import ASensorSupervisor
-from .ASignalPropagator import ASignalPropagator
-from .ASignalSource import ASignalSource
 
 import ActorSystem.Messages
 import Messages
 from ActorSystem import Actor
 from Actors.ASensorGroup import ASensorGroup
+from Actors.SignalSources.SoundSource import SoundSource
+from .ASensorGroupFormer import ASensorGroupFormer
+from .ASensorSupervisor import ASensorSupervisor
+from .ASignalPropagator import ASignalPropagator
 
 
 class AModel(Actor):
@@ -62,8 +62,8 @@ class AModel(Actor):
             self._signal_propagator.tell(ActorSystem.Messages.AddListener(self, self._sensor_actors[sensor]))
 
     def _initialize_signal_source(self):
-        self._signal_source = ASignalSource(position=AModel.list_to_vector((7, 7, 0)),
-                                            signal_propagator=self._signal_propagator)
+        self._signal_source = SoundSource(position=AModel.list_to_vector((7, 7, 0)),
+                                          signal_propagator=self._signal_propagator)
         self._signal_source.tell(Messages.GenerateSignal(self))
 
     def _initialize_sensor_supervisor(self):

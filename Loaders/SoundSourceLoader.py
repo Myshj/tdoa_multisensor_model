@@ -1,17 +1,17 @@
 import auxillary
 from .Base import Base
-from Actors.Sensors import SoundSensor
+from Actors.SignalSources import SoundSource
 
 
-class SensorLoader(Base):
+class SoundSourceLoader(Base):
     """
     Загружает сенсоры из базы данных.
     """
 
     def _restore_actor(self, actor_info: dict):
         """
-        Принимает словарь - информацию о сенсоре.
-        Возвращает экземпляр SoundSensor.
+        Принимает словарь - информацию об источнике звука.
+        Возвращает экземпляр SoundSource.
         :param dict actor_info: Словарь в формате {
         'id': int,
         'position': {
@@ -19,15 +19,13 @@ class SensorLoader(Base):
             'y': float,
             'z': float
         },
-        'radius': float,
-        'heartbeat_interval': float,
+        'interval': float,
         'state': str
         }
         :return: SoundSensor.
         """
-        return SoundSensor(
+        return SoundSource(
             auxillary.dict_to_point(auxillary.get_json_from_server(actor_info['position'], self._credentials)),
-            actor_info['radius'],
-            actor_info['heartbeat_interval'],
+            actor_info['interval'],
             actor_info['state']
         )

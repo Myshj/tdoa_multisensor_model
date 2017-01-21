@@ -1,5 +1,8 @@
-from ActorSystem.Messages import Message
+import gevent
+from datetime import datetime
+import Messages
 from ActorSystem import Broadcaster
+from ActorSystem.Messages import Broadcast
 from shapely.geometry import Point
 from .Base import Base
 
@@ -10,43 +13,66 @@ class SoundSensor(Base):
     ВНИМАНИЕ! На данный момент, время прибытия сигнала задаётся в сообщении о получении сигнала.
     """
 
-    def __init__(self, position: Point, radius: float, heartbeat_interval: float):
+    def __init__(self, position: Point, radius: float, heartbeat_interval: float, state: str):
         """
         Конструктор
         :param Point position: Позиция.
         :param float radius: Радиус действия датчика в метрах.
         :param float heartbeat_interval: Интервал между уведомлениями о работоспособности себя в секундах.
         """
-        super(SoundSensor, self).__init__()
+        super().__init__()
         self.position = position
         self.signal_received_broadcaster = Broadcaster()
         self.alive_broadcaster = Broadcaster()
         self.heartbeat_interval = heartbeat_interval
         self.radius = radius
-        self._state = 'ok'
+        self.state = state
 
-    def on_message(self, message: Message):
-        pass
+    def on_message(self, message):
+        if isinstance(message, Messages.Actions.Signal.Receive):
+            self.on_signal_received(message.signal, message.when)
+
+    def on_started(self):
+        self._start_heartbeat()
+
+    def on_signal_received(self, signal, when: datetime):
+        """
+        Выполняется каждый раз при поступлении сигнала.
+        :param signal: Информация о сигнале.
+        :param datetime when: Когда сигнал был получен.
+        :return:
+        """
+        self._notify_about_received_signaal(signal, when)
+
+    def _notify_about_received_signaal(self, signal, when: datetime):
+        """
+        Уведомляет всех заинтересованных о факте получения сигнала.
+        :param signal: Информация о сигнале.
+        :param datetime when: Когда сигнал был получен.
+        :return:
+        """
+        self.signal_received_broadcaster.tell(
+            Broadcast(self, Messages.Actions.Signal.ReportAboutReceiving(self, signal, when, self))
+        )
+
+    def _start_heartbeat(self):
+        """
+        Стартовать периодическое уведомление всех заинтересованных о состоянии себя.
+        :return:
+        """
+        gevent.spawn(self._heartbeat_cycle)
+
+    def _heartbeat_cycle(self):
+        """
+        Периодически уведомлять всех заинтересованных о состоянии себя.
+        :return:
+        """
+        while self._running and self.state == 'working':
+            self.alive_broadcaster.tell(Broadcast(self, Messages.ActorReports.Alive(self, actor=self)))
+            gevent.sleep(self.heartbeat_interval)
 
     def __str__(self):
         return "SoundSensor(position={0})".format(self.position)
 
     def __repr__(self):
         return "SoundSensor(position={0})".format(self.position)
-
-        # def on_message(self, message):
-        #     if isinstance(message, Messages.Receive):
-        #         self.signal_received_broadcaster.tell(
-        #             ActorSystem.Messages.Broadcast(self, Messages.ReportAboutReceiving(self, message.when, self))
-        #         )
-        #
-        # def on_started(self):
-        #     self._start_heartbeat()
-        #
-        # def _start_heartbeat(self):
-        #     gevent.spawn(self._heartbeat_cycle)
-        #
-        # def _heartbeat_cycle(self):
-        #     while self._running and self._state == 'ok':
-        #         self.alive_broadcaster.tell(ActorSystem.Messages.Broadcast(self, Messages.Alive(self, actor=self)))
-        #         gevent.sleep(self.heartbeat_interval)
