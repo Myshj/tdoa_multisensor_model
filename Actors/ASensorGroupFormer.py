@@ -25,9 +25,9 @@ class ASensorGroupFormer(Actor):
             }
 
         forms_from_combinations = {
-            combination: MultiPoint([
-                                        sensor_to_figure_table[sensor] for sensor in combination
-                                        ]).convex_hull for combination in good_combinations
+            combination: MultiPoint(
+                [sensor_to_figure_table[sensor] for sensor in combination]
+            ).convex_hull for combination in good_combinations
             }
 
         combinations_to_return = good_combinations.copy()

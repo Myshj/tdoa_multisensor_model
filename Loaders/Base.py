@@ -1,4 +1,4 @@
-import auxillary
+from auxillary import functions
 
 
 class Base(object):
@@ -20,7 +20,7 @@ class Base(object):
         Загружает акторов из базы данных.
         :return:
         """
-        raw_actors = auxillary.get_json_from_server(self._url, self._credentials)
+        raw_actors = functions.get_json_from_server(self._url, self._credentials)
         return self._restore_actors(raw_actors)
 
     def _restore_actors(self, raw_data: list):

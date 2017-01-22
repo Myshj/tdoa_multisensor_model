@@ -6,10 +6,10 @@ import ActorSystem.Messages
 import Messages
 from ActorSystem import Actor
 from Actors.ASensorGroup import ASensorGroup
-from Actors.SignalSources.SoundSource import SoundSource
+from Actors.SignalPropagators.SoundPropagator import SoundPropagator
+from Actors.WorldRelated.SignalSources import SoundSource
 from .ASensorGroupFormer import ASensorGroupFormer
 from .ASensorSupervisor import ASensorSupervisor
-from .ASignalPropagator import ASignalPropagator
 
 
 class AModel(Actor):
@@ -56,8 +56,8 @@ class AModel(Actor):
             }
 
     def _initialize_signal_propagator(self):
-        self._signal_propagator = ASignalPropagator(speed_of_sound=self._speed_of_sound,
-                                                    source_position=AModel.list_to_vector((7, 7, 0)))
+        self._signal_propagator = SoundPropagator(speed_of_sound=self._speed_of_sound,
+                                                  source_position=AModel.list_to_vector((7, 7, 0)))
         for sensor in self._sensor_actors:
             self._signal_propagator.tell(ActorSystem.Messages.AddListener(self, self._sensor_actors[sensor]))
 

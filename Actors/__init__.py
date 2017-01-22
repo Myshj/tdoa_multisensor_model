@@ -1,5 +1,7 @@
-from Actors.SignalSources.SoundSource import SoundSource
+from . import SignalPropagators
+from . import WorldRelated
+from . import Worlds
+
 from .ALocator import ALocator
 from .ASensorGroup import ASensorGroup
 from .ASensorSupervisor import ASensorSupervisor
-from .ASignalPropagator import ASignalPropagator

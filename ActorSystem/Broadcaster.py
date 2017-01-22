@@ -14,9 +14,9 @@ class Broadcaster(Actor):
 
     def on_message(self, message: Message):
         if isinstance(message, ListenerActions.Add):
-            self._add_listener(message.listener)
+            self._add_listener(message.actor)
         elif isinstance(message, ListenerActions.Remove):
-            self._remove_listener(message.listener)
+            self._remove_listener(message.actor)
         elif isinstance(message, Broadcast):
             self._broadcast(message.message)
 

@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from ActorSystem import Actor
-from Actors.Sensors.SoundSensor import SoundSensor
+from Actors.WorldRelated.Sensors import SoundSensor
 from .Base import Base
 
 

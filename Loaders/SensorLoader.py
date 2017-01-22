@@ -1,6 +1,7 @@
-import auxillary
+from Actors.WorldRelated.Sensors import SoundSensor
+from auxillary import functions
+from auxillary.Position import Position
 from .WorldRelatedObjectLoader import WorldRelatedObjectLoader
-from Actors.Sensors import SoundSensor
 
 
 class SensorLoader(WorldRelatedObjectLoader):
@@ -25,9 +26,10 @@ class SensorLoader(WorldRelatedObjectLoader):
         }
         :return: SoundSensor.
         """
+        p = functions.get_json_from_server(actor_info['position'], self._credentials)
         return SoundSensor(
-            world=self.worlds[auxillary.get_json_from_server(actor_info['world'], self._credentials)['id']],
-            position=auxillary.dict_to_point(auxillary.get_json_from_server(actor_info['position'], self._credentials)),
+            world=self.worlds[functions.get_json_from_server(actor_info['world'], self._credentials)['id']],
+            position=Position(p['x'], p['y'], p['z']),
             radius=actor_info['radius'],
             heartbeat_interval=actor_info['heartbeat_interval'],
             state=actor_info['state']
