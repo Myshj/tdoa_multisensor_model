@@ -6,6 +6,7 @@ from ActorSystem import Broadcaster
 from ActorSystem.Messages import Broadcast
 from .Base import Base
 from shapely.geometry import Point
+from Actors.Worlds import Base as World
 
 
 class SoundSource(Base):
@@ -13,14 +14,14 @@ class SoundSource(Base):
     Источник звукового сигнала.
     """
 
-    def __init__(self, position: Point, interval: float, state: str):
+    def __init__(self, world: World, position: Point, interval: float, state: str):
         """
         Конструктор.
         :param Point position: Позиция.
         :param float interval: Интервал в секундах между генерациями сигнала.
         :param sre state: Текущее состояние.
         """
-        super().__init__()
+        super().__init__(world)
         self.position = position
         self.interval = interval
         self.state = state

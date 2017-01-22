@@ -1,9 +1,9 @@
 import auxillary
-from .Base import Base
+from .WorldRelatedObjectLoader import WorldRelatedObjectLoader
 from Actors.SignalSources import SoundSource
 
 
-class SoundSourceLoader(Base):
+class SoundSourceLoader(WorldRelatedObjectLoader):
     """
     Загружает сенсоры из базы данных.
     """
@@ -25,7 +25,8 @@ class SoundSourceLoader(Base):
         :return: SoundSensor.
         """
         return SoundSource(
-            auxillary.dict_to_point(auxillary.get_json_from_server(actor_info['position'], self._credentials)),
-            actor_info['interval'],
-            actor_info['state']
+            world=self.worlds[auxillary.get_json_from_server(actor_info['world'], self._credentials)['id']],
+            position=auxillary.dict_to_point(auxillary.get_json_from_server(actor_info['position'], self._credentials)),
+            interval=actor_info['interval'],
+            state=actor_info['state']
         )

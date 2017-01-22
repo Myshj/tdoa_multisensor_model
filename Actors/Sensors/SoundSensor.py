@@ -5,6 +5,7 @@ from ActorSystem import Broadcaster
 from ActorSystem.Messages import Broadcast
 from shapely.geometry import Point
 from .Base import Base
+from Actors.Worlds import Base as World
 
 
 class SoundSensor(Base):
@@ -13,14 +14,15 @@ class SoundSensor(Base):
     ВНИМАНИЕ! На данный момент, время прибытия сигнала задаётся в сообщении о получении сигнала.
     """
 
-    def __init__(self, position: Point, radius: float, heartbeat_interval: float, state: str):
+    def __init__(self, world: World, position: Point, radius: float, heartbeat_interval: float, state: str):
         """
         Конструктор
+        :param World world: Мир, в котором существует датчик.
         :param Point position: Позиция.
         :param float radius: Радиус действия датчика в метрах.
         :param float heartbeat_interval: Интервал между уведомлениями о работоспособности себя в секундах.
         """
-        super().__init__()
+        super().__init__(world)
         self.position = position
         self.signal_received_broadcaster = Broadcaster()
         self.alive_broadcaster = Broadcaster()
