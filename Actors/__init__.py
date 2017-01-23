@@ -1,4 +1,4 @@
-from . import SignalPropagators
+from Actors.WorldRelated import SignalPropagators
 from . import WorldRelated
 from . import Worlds
 

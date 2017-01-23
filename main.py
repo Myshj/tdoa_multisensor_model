@@ -1,7 +1,11 @@
-import settings
-import Loaders
 import gevent
+
+import Loaders
+import settings
 from ActorSystem.Messages import Message
+from Actors.WorldRelated.SignalPropagators import SoundPropagator
+from Actors.WorldRelated.Connectors import SoundSourceToPropagatorConnector
+from auxillary import Position
 
 if __name__ == '__main__':
     world_loader = Loaders.WorldLoader(
@@ -23,11 +27,14 @@ if __name__ == '__main__':
         worlds=worlds
     )
     sound_sources = sound_source_loader.load_all()
-    print(sound_sources)
-    sensors[2].tell(Message(None))
-    sensors[2].tell(Message(None))
-    sensors[2].tell(Message(None))
-    sensors[2].tell(Message(None))
-    sensors[2].tell(Message(None))
+
+    propagator = SoundPropagator(position=Position(0, 0, 0), world=worlds[1], sensors=sensors.values())
+    connector = SoundSourceToPropagatorConnector(
+        position=Position(0, 0, 0),
+        world=worlds[1],
+        source=sound_sources[1],
+        propagator=propagator
+    )
+
     while True:
         gevent.sleep(1)

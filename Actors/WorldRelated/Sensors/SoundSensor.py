@@ -48,9 +48,9 @@ class SoundSensor(Base):
         :param datetime when: Когда сигнал был получен.
         :return:
         """
-        self._notify_about_received_signaal(signal, when)
+        self._notify_about_received_signal(signal, when)
 
-    def _notify_about_received_signaal(self, signal, when: datetime):
+    def _notify_about_received_signal(self, signal, when: datetime):
         """
         Уведомляет всех заинтересованных о факте получения сигнала.
         :param signal: Информация о сигнале.

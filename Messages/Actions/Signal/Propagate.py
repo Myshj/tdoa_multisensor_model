@@ -1,19 +1,20 @@
 from .Base import Base
 from ActorSystem import Actor
-from collections import Iterable
+from Signals import Base as Signal
+from Actors.WorldRelated.SignalSources import Base as SignalSource
 
 
 class Propagate(Base):
     """
-    Сообщение о том, что нужно распространить сигнал, начиная с некоторой позиции.
+    Сообщение о том, что нужно распространить сигнал от источника.
     """
 
-    def __init__(self, sender: Actor, signal, source_position: Iterable):
+    def __init__(self, sender: Actor, signal: Signal, source: SignalSource):
         """
 
         :param Actor sender: Адресант сообщения.
-        :param signal:
-        :param Iterable source_position: Позиция источника сигнала.
+        :param Signal signal: Информация о сигнале.
+        :param SignalSource source: Источник сигнала.
         """
         super().__init__(sender, signal)
-        self.source_position = source_position
+        self.source = source

@@ -6,7 +6,7 @@ import ActorSystem.Messages
 import Messages
 from ActorSystem import Actor
 from Actors.ASensorGroup import ASensorGroup
-from Actors.SignalPropagators.SoundPropagator import SoundPropagator
+from Actors.WorldRelated.SignalPropagators import SoundPropagator
 from Actors.WorldRelated.SignalSources import SoundSource
 from .ASensorGroupFormer import ASensorGroupFormer
 from .ASensorSupervisor import ASensorSupervisor
