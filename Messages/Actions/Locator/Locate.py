@@ -1,6 +1,5 @@
 from .Base import Base
 from ActorSystem import Actor
-from collections import Iterable
 
 
 class Locate(Base):
@@ -8,11 +7,11 @@ class Locate(Base):
     Сообщение о том, что нужно вычислить положение объекта на основании задержек прихода сигнала от него.
     """
 
-    def __init__(self, sender: Actor, transit_times: Iterable):
+    def __init__(self, sender: Actor, time_delays_table: dict):
         """
         Конструктор.
         :param Actor sender: Адресант сообщения.
-        :param Iterable transit_times: Задержки прихода сигнала от объекта.
+        :param dict time_delays_table: Словарь в формате: {sensor: time_delay}.
         """
         super().__init__(sender)
-        self.transit_times = transit_times
+        self.time_delays_table = time_delays_table

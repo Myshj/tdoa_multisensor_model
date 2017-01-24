@@ -30,3 +30,13 @@ class Position(object):
         :return numpy.array: Позиция в виде массива.
         """
         return self._array_representation
+
+    def __str__(self):
+        return "Position({0}, {1}, {2})".format(
+            self._point_representation.x, self._point_representation.y, self._point_representation.z
+        )
+
+    def __repr__(self):
+        return "Position({0}, {1}, {2})".format(
+            self._point_representation.x, self._point_representation.y, self._point_representation.z
+        )

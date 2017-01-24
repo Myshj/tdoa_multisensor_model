@@ -4,7 +4,7 @@ from numpy.linalg import norm
 import ActorSystem.Messages
 import Messages
 from ActorSystem import Actor
-from Actors.ALocator import ALocator
+from Actors.WorldRelated.Locators import TDOA
 
 
 class ASensorGroup(Actor):
@@ -41,7 +41,7 @@ class ASensorGroup(Actor):
         self._listen_for_sensor_signals()
 
     def on_message(self, message):
-        if isinstance(message, Messages.ReportAboutReceiving):
+        if isinstance(message, Messages.Actions.Signal.ReportAboutReceiving):
             self._on_received_signal(
                 when_received=message.when,
                 sender=message.sensor
@@ -84,7 +84,7 @@ class ASensorGroup(Actor):
         self._max_wait_time = (max_distance / self._speed_of_sound) * ASensorGroup.multiplier_for_max_wait_time
 
     def _initialize_locator(self):
-        self._locator_actor = ALocator(
+        self._locator_actor = TDOA(
             sensor_positions=[sensor_actor.position for sensor_actor in self._sensors_actors],
             speed_of_sound=self._speed_of_sound
         )

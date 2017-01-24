@@ -6,9 +6,9 @@ import ActorSystem.Messages
 import Messages
 from ActorSystem import Actor
 from Actors.ASensorGroup import ASensorGroup
+from Actors.WorldRelated.CombinationCalculators.TDOACombinationCalculator import TDOACombinationCalculator
 from Actors.WorldRelated.SignalPropagators import SoundPropagator
 from Actors.WorldRelated.SignalSources import SoundSource
-from .ASensorGroupFormer import ASensorGroupFormer
 from .ASensorSupervisor import ASensorSupervisor
 
 
@@ -25,7 +25,7 @@ class AModel(Actor):
         :param float speed_of_sound: Скорость звука в среде.
         """
         super(AModel, self).__init__()
-        group_former = ASensorGroupFormer()
+        group_former = TDOACombinationCalculator()
         self._speed_of_sound = speed_of_sound
 
         self._sensor_actors = sensors

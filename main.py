@@ -2,7 +2,8 @@ import gevent
 
 import Loaders
 import settings
-from ActorSystem.Messages import Message
+from Messages.Actions.CombinationCalculator import CalculateCombinations
+from Actors.WorldRelated.CombinationCalculators import TDOACombinationCalculator
 from Actors.WorldRelated.SignalPropagators import SoundPropagator
 from Actors.WorldRelated.Connectors import SoundSourceToPropagatorConnector
 from auxillary import Position
@@ -34,6 +35,11 @@ if __name__ == '__main__':
         world=worlds[1],
         source=sound_sources[1],
         propagator=propagator
+    )
+
+    group_former = TDOACombinationCalculator(position=Position(0, 0, 0), world=worlds[1])
+    group_former.tell(
+        CalculateCombinations(sender=None, sensors=sensors.values())
     )
 
     while True:
