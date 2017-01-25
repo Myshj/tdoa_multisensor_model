@@ -4,3 +4,5 @@ from . import SignalSources
 from . import SignalPropagators
 from . import Connectors
 from . import CombinationCalculators
+from . import Supervisors
+from . import SensorGroups

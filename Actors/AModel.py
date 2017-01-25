@@ -5,8 +5,8 @@ import numpy
 import ActorSystem.Messages
 import Messages
 from ActorSystem import Actor
-from Actors.ASensorGroup import ASensorGroup
 from Actors.WorldRelated.CombinationCalculators.TDOACombinationCalculator import TDOACombinationCalculator
+from Actors.WorldRelated.SensorGroups.TDOASensorGroup import TDOASensorGroup
 from Actors.WorldRelated.SignalPropagators import SoundPropagator
 from Actors.WorldRelated.SignalSources import SoundSource
 from .ASensorSupervisor import ASensorSupervisor
@@ -21,7 +21,7 @@ class AModel(Actor):
         """
         Конструктор.
         :param list(SoundSensor) sensors: Список акторов-датчиков.
-        :param list(ASensorGroup)sensor_groups: Список акторов-групп датчиков.
+        :param list(TDOASensorGroup)sensor_groups: Список акторов-групп датчиков.
         :param float speed_of_sound: Скорость звука в среде.
         """
         super(AModel, self).__init__()
@@ -47,8 +47,8 @@ class AModel(Actor):
 
     def _initialize_sensor_groups(self, sensor_groups):
         self._sensor_groups = {
-            sensor_group_key: ASensorGroup(
-                sensors_actors=[
+            sensor_group_key: TDOASensorGroup(
+                sensors=[
                     self._sensor_actors[sensor_actor_key] for sensor_actor_key in sensor_groups[sensor_group_key]
                     ],
                 speed_of_sound=self._speed_of_sound,

@@ -27,8 +27,14 @@ class TDOA(Base):
         :param dict time_delays_table: Словарь в формате: {sensor: time_delay}
         :return:
         """
+        microphone_positions = []
+        time_delays = []
+        for sensor in time_delays_table.keys():
+            microphone_positions.append(sensor.position.as_array())
+            time_delays.append(time_delays_table[sensor])
+
         locator = Locator(
-            microphone_positions=map(lambda sensor: sensor.position.as_array(), time_delays_table.keys()),
+            microphone_positions=microphone_positions,
             speed_of_sound=self.world.speed_of_sound
         )
-        print(locator.locate(time_delays_table.values()))
+        print(locator.locate(time_delays))

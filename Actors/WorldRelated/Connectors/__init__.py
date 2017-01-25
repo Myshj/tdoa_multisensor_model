@@ -1,2 +1,3 @@
 from .Base import Base
 from .SoundSourceToPropagatorConnector import SoundSourceToPropagatorConnector
+from .TDOACombinationCalculatorToGroupSupervisorConnector import TDOACombinationCalculatorToGroupSupervisorConnector

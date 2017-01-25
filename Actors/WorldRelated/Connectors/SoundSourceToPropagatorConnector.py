@@ -33,6 +33,11 @@ class SoundSourceToPropagatorConnector(Base):
             self.on_signal_generated(signal=message.signal, source=message.source)
 
     def _listen_to_source(self, source: SoundSource):
+        """
+        Слушать источник звука на предмет генерации сигналов.
+        :param SoundSource source: Источник, который нужно слушать.
+        :return:
+        """
         source.signal_generated_broadcaster.tell(
             AddListener(
                 sender=self,
@@ -41,9 +46,21 @@ class SoundSourceToPropagatorConnector(Base):
         )
 
     def on_signal_generated(self, signal: Sound, source: SoundSource):
+        """
+        Вызывается каждый раз, когда связанный источник звука генерирует сигнал.
+        :param Sound signal: Сгенерированный сигнал.
+        :param SoundSource source: Источник, выдавший сигнал.
+        :return:
+        """
         self._notify_propagator(signal=signal, source=source)
 
     def _notify_propagator(self, signal: Sound, source: SoundSource):
+        """
+        Уведомить связанного распространителя сигнала о необходимости распространения сгенерированного сигнала.
+        :param Sound signal: Сгенерированный сигнал.
+        :param SoundSource source: Источник, выдавший сигнал.
+        :return:
+        """
         self.propagator.tell(
             Propagate(
                 sender=self,
