@@ -1,13 +1,13 @@
 from datetime import datetime
-
 import gevent
-
 import Messages
 from ActorSystem import Broadcaster
 from ActorSystem.Messages import Broadcast
 from Actors.Worlds import Base as World
 from auxillary.Position import Position
 from .Base import Base
+from Messages.Reports import SensorState as SensorStateReports
+from .States import States
 
 
 class SoundSensor(Base):
@@ -16,13 +16,14 @@ class SoundSensor(Base):
     ВНИМАНИЕ! На данный момент, время прибытия сигнала задаётся в сообщении о получении сигнала.
     """
 
-    def __init__(self, position: Position, world: World, radius: float, heartbeat_interval: float, state: str):
+    def __init__(self, position: Position, world: World, radius: float, heartbeat_interval: float, state: States):
         """
         Конструктор
         :param World world: Мир, в котором существует датчик.
         :param Position position: Позиция.
         :param float radius: Радиус действия датчика в метрах.
         :param float heartbeat_interval: Интервал между уведомлениями о работоспособности себя в секундах.
+        :param States state: Состояние датчика.
         """
         super().__init__(
             position=position,
@@ -73,8 +74,13 @@ class SoundSensor(Base):
         Периодически уведомлять всех заинтересованных о состоянии себя.
         :return:
         """
-        while self._running and self.state == 'working':
-            self.alive_broadcaster.tell(Broadcast(self, Messages.ActorReports.Alive(self, actor=self)))
+        while self._running and self.state == States.Working:
+            self.alive_broadcaster.tell(
+                Broadcast(
+                    sender=self,
+                    message=SensorStateReports.Alive(sender=self, sensor=self)
+                )
+            )
             gevent.sleep(self.heartbeat_interval)
 
     def __str__(self):

@@ -2,6 +2,7 @@ from Actors.WorldRelated.Sensors import SoundSensor
 from auxillary import functions
 from auxillary.Position import Position
 from .WorldRelatedObjectLoader import WorldRelatedObjectLoader
+from Actors.WorldRelated.Sensors import States
 
 
 class SensorLoader(WorldRelatedObjectLoader):
@@ -32,5 +33,5 @@ class SensorLoader(WorldRelatedObjectLoader):
             position=Position(p['x'], p['y'], p['z']),
             radius=actor_info['radius'],
             heartbeat_interval=actor_info['heartbeat_interval'],
-            state=actor_info['state']
+            state=States.from_string(actor_info['state'])
         )

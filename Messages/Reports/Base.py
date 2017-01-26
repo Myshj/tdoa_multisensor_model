@@ -1,7 +1,7 @@
-from ActorSystem.Messages.ActorActions import Base as BaseActorAction
+from ActorSystem.Messages import Message
 
 
-class Base(BaseActorAction):
+class Base(Message):
     """
     Базовый класс для сообщений об отчётах об акторах.
     """

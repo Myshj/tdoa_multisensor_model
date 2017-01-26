@@ -5,5 +5,14 @@ class States(Enum):
     """
     Состочния датчика.
     """
-    ok = 1
-    broken = 2
+    Working = 1
+    Waiting = 2
+    Broken = 3
+
+    @staticmethod
+    def from_string(string: str):
+        return {
+            string == 'working': States.Working,
+            string == 'waiting': States.Waiting,
+            string == 'broken': States.Broken
+        }[True]

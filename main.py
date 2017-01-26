@@ -53,11 +53,5 @@ if __name__ == '__main__':
         CalculateCombinations(sender=None, sensors=sensors.values())
     )
 
-    group = TDOASensorGroup(
-        position=Position(0, 0, 0),
-        world=worlds[1],
-        sensors=[sensors[2], sensors[4], sensors[6], sensors[8], sensors[10]]
-    )
-
     while True:
         gevent.sleep(1)

@@ -72,6 +72,10 @@ class SoundPropagator(Base):
         :return:
         """
         distance = functions.distance_between_positions(source.position, sensor.position)
+
+        if distance > sensor.radius:
+            return
+
         delay_in_seconds = distance / self.world.speed_of_sound
 
         wake_datetime = signal.when_generated + datetime.timedelta(seconds=delay_in_seconds)

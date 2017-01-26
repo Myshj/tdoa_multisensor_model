@@ -9,7 +9,7 @@ from Actors.WorldRelated.CombinationCalculators.TDOACombinationCalculator import
 from Actors.WorldRelated.SensorGroups.TDOASensorGroup import TDOASensorGroup
 from Actors.WorldRelated.SignalPropagators import SoundPropagator
 from Actors.WorldRelated.SignalSources import SoundSource
-from .ASensorSupervisor import ASensorSupervisor
+from Actors.WorldRelated.Supervisors.SensorOperabilitySupervisor import SensorOperabilitySupervisor
 
 
 class AModel(Actor):
@@ -67,7 +67,7 @@ class AModel(Actor):
         self._signal_source.tell(Messages.GenerateSignal(self))
 
     def _initialize_sensor_supervisor(self):
-        self._sensor_supervisor = ASensorSupervisor(self._sensor_actors)
+        self._sensor_supervisor = SensorOperabilitySupervisor(self._sensor_actors)
 
     @staticmethod
     def list_to_vector(list):
