@@ -4,6 +4,9 @@ from auxillary import Position
 from Actors.Worlds import Base as World
 from Messages.Actions.Supervisors.TDOA import FormGroups
 from Actors.WorldRelated.SensorGroups import TDOASensorGroup
+from Actors.WorldRelated.CombinationCalculators import TDOACombinationCalculator
+from ActorSystem.Messages.ActorActions.ListenerActions import Add as AddListener
+from Messages.Actions.CombinationCalculator import CalculateCombinations, CombinationsCalculated
 
 
 class TDOAGroupSupervisor(Base):
@@ -19,12 +22,24 @@ class TDOAGroupSupervisor(Base):
         """
         super().__init__(position, world)
         self.groups = set()
+        self._combination_calculator = TDOACombinationCalculator(
+            position=self.position,
+            world=self.world
+        )
+        self._combination_calculator.groups_formed_broadcaster.tell(
+            AddListener(
+                sender=self,
+                actor=self
+            )
+        )
 
     def on_message(self, message: Message):
         if isinstance(message, FormGroups):
-            self.on_form_groups(sensors=message.sensors, combinations=message.combinations)
+            self.on_form_groups(sensors=message.sensors)
+        elif isinstance(message, CombinationsCalculated):
+            self.on_combinations_calculated(sensors=message.sensors, combinations=message.combinations)
 
-    def on_form_groups(self, sensors: list, combinations: set):
+    def on_form_groups(self, sensors: list):
         """
         Вызывается каждый раз при необходимости формирования групп из датчиков.
         :param list sensors: Датчики, из которых нужно сформировать группы.
@@ -32,7 +47,19 @@ class TDOAGroupSupervisor(Base):
         :return:
         """
         self._stop_old_groups()
+        self._form_combinations(sensors)
+
+    def on_combinations_calculated(self, sensors: list, combinations: set):
+        self._stop_old_groups()
         self._form_new_groups(sensors=sensors, combinations=combinations)
+
+    def _form_combinations(self, sensors: list):
+        self._combination_calculator.tell(
+            CalculateCombinations(
+                sender=self,
+                sensors=sensors
+            )
+        )
 
     def _form_new_groups(self, sensors: list, combinations: set):
         """
