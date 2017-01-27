@@ -106,7 +106,7 @@ class TDOASensorGroup(Base):
         Выдача команды локатору на обнаружение объекта.
         :return:
         """
-        self._locator_actor.tell(
+        self.locator.tell(
             Locate(
                 sender=self,
                 time_delays_table={
@@ -144,8 +144,8 @@ class TDOASensorGroup(Base):
         Инициализация локатора.
         :return:
         """
-        self._locator_actor = TDOA(
-            position=Position(0, 0, 0),
+        self.locator = TDOA(
+            position=self.position,
             world=self.world
         )
 
