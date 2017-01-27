@@ -43,7 +43,6 @@ class TDOAGroupSupervisor(Base):
         """
         Вызывается каждый раз при необходимости формирования групп из датчиков.
         :param list sensors: Датчики, из которых нужно сформировать группы.
-        :param set combinations: Подходящие для групп комбинации датчиков.
         :return:
         """
         self._stop_old_groups()

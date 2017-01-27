@@ -3,8 +3,9 @@ import gevent
 import Loaders
 import settings
 from Actors.WorldRelated.SignalPropagators import SoundPropagator
-from Actors.WorldRelated.Connectors import SoundSourceToPropagatorConnector
-from Actors.WorldRelated.Supervisors import TDOAGroupSupervisor
+from Actors.WorldRelated.Connectors import SoundSourceToPropagatorConnector, \
+    SensorSupervisorToTDOAGroupSupervisorConnector
+from Actors.WorldRelated.Supervisors import TDOAGroupSupervisor, SensorOperabilitySupervisor
 from Messages.Actions.Supervisors.TDOA import FormGroups
 from auxillary import Position
 
@@ -38,6 +39,14 @@ if __name__ == '__main__':
     )
 
     group_supervisor = TDOAGroupSupervisor(position=Position(0, 0, 0), world=worlds[1])
+    operability_supervisor = SensorOperabilitySupervisor(position=Position(0, 0, 0), world=worlds[1],
+                                                         sensors=sensors.values())
+    sensor_supervisor_to_group_supervisor_connector = SensorSupervisorToTDOAGroupSupervisorConnector(
+        position=Position(0, 0, 0),
+        world=worlds[1],
+        sensor_operability_supervisor=operability_supervisor,
+        tdoa_group_supervisor=group_supervisor
+    )
     group_supervisor.tell(FormGroups(sender=None, sensors=sensors.values()))
 
     while True:

@@ -24,6 +24,7 @@ class SensorOperabilitySupervisor(Base):
         :param list sensors: Датчики, за которыми наблюдает актор.
         """
         super().__init__(position=position, world=world)
+        self._broken_sensors = set()
         self.reconfiguration_required_broadcaster = Broadcaster()
         self._initialize_tables(sensors)
         self._listen_to_sensors(sensors)
@@ -100,7 +101,7 @@ class SensorOperabilitySupervisor(Base):
         :param Sensor sensor: Датчик, который нужно слушать.
         :return:
         """
-        sensor.alive_broadcaster.tell(AddListener(sender=self, actor=self))
+        sensor.state_broadcaster.tell(AddListener(sender=self, actor=self))
 
     def _notify_that_reconfiguration_is_required(self):
         """
@@ -124,6 +125,7 @@ class SensorOperabilitySupervisor(Base):
         :return:
         """
         self.state_table[sensor] = States.Broken
+        self._broken_sensors.add(sensor)
 
     def _update_report_time(self, sensor: Sensor):
         """
@@ -147,7 +149,7 @@ class SensorOperabilitySupervisor(Base):
         """
         while self._running:
             for sensor in self.last_activity_times.keys():
-                if not self._did_sensor_report_recently(sensor):
+                if not self._did_sensor_report_recently(sensor) and sensor not in self._broken_sensors:
                     self._determine_that_sensor_is_broken(sensor)
                     self._notify_that_reconfiguration_is_required()
 

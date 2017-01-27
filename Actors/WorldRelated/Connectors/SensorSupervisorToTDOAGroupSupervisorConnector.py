@@ -65,8 +65,8 @@ class SensorSupervisorToTDOAGroupSupervisorConnector(Base):
         :return:
         """
         ret = set()
-        for sensor, state in sensor_states:
-            if state == States.Working:
+        for sensor in sensor_states.keys():
+            if sensor_states[sensor] == States.Working:
                 ret.add(sensor)
         return ret
 
@@ -77,11 +77,8 @@ class SensorSupervisorToTDOAGroupSupervisorConnector(Base):
         :return:
         """
         sensor_operability_supervisor.reconfiguration_required_broadcaster.tell(
-            Broadcast(
+            message=AddListener(
                 sender=self,
-                message=AddListener(
-                    sender=self,
-                    actor=self
-                )
+                actor=self
             )
         )

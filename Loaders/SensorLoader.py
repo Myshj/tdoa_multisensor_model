@@ -33,5 +33,6 @@ class SensorLoader(WorldRelatedObjectLoader):
             position=Position(p['x'], p['y'], p['z']),
             radius=actor_info['radius'],
             heartbeat_interval=actor_info['heartbeat_interval'],
+            failure_probability=actor_info['failure_probability'],
             state=States.from_string(actor_info['state'])
         )
