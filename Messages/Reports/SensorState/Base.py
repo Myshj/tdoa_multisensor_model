@@ -1,5 +1,5 @@
 from Messages.Reports.Base import Base as ReportMessage
-from Actors.WorldRelated.Sensors import Base as Sensor
+from actors.world_related.signal_related.sound_related.sensors import Base as Sensor
 from ActorSystem import Actor
 
 

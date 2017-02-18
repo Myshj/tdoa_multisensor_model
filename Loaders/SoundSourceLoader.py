@@ -1,4 +1,4 @@
-from Actors.WorldRelated.SignalSources import SoundSource
+from actors.world_related.signal_related.sound_related.sources import SoundSource
 from auxillary import functions
 from auxillary.Position import Position
 from .WorldRelatedObjectLoader import WorldRelatedObjectLoader

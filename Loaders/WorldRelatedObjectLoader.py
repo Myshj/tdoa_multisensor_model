@@ -11,7 +11,7 @@ class WorldRelatedObjectLoader(Base):
         Конструктор.
         :param str url: Адрес ресурса, с которым работаем.
         :param tuple credentials: Авторизационные данные.
-        :param dict worlds: Словарь миров в формате {id: Actors.Worlds.Earth}
+        :param dict worlds: Словарь миров в формате {id: actors.worlds.Earth}
         """
         super().__init__(url, credentials)
         self.worlds = worlds

@@ -2,10 +2,10 @@ import gevent
 
 import Loaders
 import settings
-from Actors.WorldRelated.SignalPropagators import SoundPropagator
-from Actors.WorldRelated.Connectors import SoundSourceToPropagatorConnector, \
+from actors.world_related.signal_related.sound_related.propagators import SoundPropagator
+from actors.world_related.connectors import SoundSourceToPropagatorConnector, \
     SensorSupervisorToTDOAGroupSupervisorConnector
-from Actors.WorldRelated.Supervisors import TDOAGroupSupervisor, SensorOperabilitySupervisor
+from actors.world_related.supervisors import TDOAGroupSupervisor, SensorOperabilitySupervisor
 from Messages.Actions.Supervisors.TDOA import FormGroups
 from auxillary import Position
 

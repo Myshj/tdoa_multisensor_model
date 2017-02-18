@@ -1,8 +1,7 @@
-from Actors.WorldRelated.Sensors import SoundSensor
+from actors.world_related.signal_related.sound_related.sensors import SoundSensor, States
 from auxillary import functions
 from auxillary.Position import Position
 from .WorldRelatedObjectLoader import WorldRelatedObjectLoader
-from Actors.WorldRelated.Sensors import States
 
 
 class SensorLoader(WorldRelatedObjectLoader):
