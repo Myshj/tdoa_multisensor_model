@@ -1,6 +1,6 @@
 # -*- coding: utf-8
-from ActorSystem import Broadcaster
-from ActorSystem.Messages import Broadcast
+from actor_system import Broadcaster
+from actor_system.broadcasters.messages import Broadcast
 from Locator import Locator
 from actors.world_related.locators.Base import Base
 from actors.world_related.locators.tdoa.messages import Locate, SoundSourceLocalized

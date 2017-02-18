@@ -1,5 +1,5 @@
 from .Base import Base
-from ActorSystem import Actor
+from actor_system import Actor
 from collections import Iterable
 
 

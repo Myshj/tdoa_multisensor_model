@@ -3,8 +3,9 @@ import itertools
 from shapely.geometry import MultiPoint
 from shapely.ops import cascaded_union
 
-from ActorSystem import Broadcaster
-from ActorSystem.Messages import Message, Broadcast
+from actor_system import Broadcaster
+from actor_system.messages import Message
+from actor_system.broadcasters.messages import Broadcast
 from actors.world_related.combination_calculators.Base import Base
 from actors.world_related.combination_calculators.tdoa.messages import CalculateCombinations, CombinationsCalculated
 from actors.worlds import Base as World

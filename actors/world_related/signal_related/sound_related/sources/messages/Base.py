@@ -1,4 +1,4 @@
-from ActorSystem.Messages import Message
+from actor_system.messages import Message
 
 
 class Base(Message):

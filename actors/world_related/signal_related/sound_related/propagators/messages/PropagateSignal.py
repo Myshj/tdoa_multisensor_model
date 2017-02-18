@@ -1,10 +1,10 @@
-from Messages.Actions.Signal.Base import Base
-from ActorSystem import Actor
-from Signals import Base as Signal
+from actor_system import Actor
+from signals import Base as Signal
+from actor_system.messages import Message
 from actors.world_related.signal_related.sound_related.sources import Base as SignalSource
 
 
-class PropagateSignal(Base):
+class PropagateSignal(Message):
     """
     Сообщение о том, что нужно распространить сигнал от источника.
     """
@@ -16,5 +16,6 @@ class PropagateSignal(Base):
         :param Signal signal: Информация о сигнале.
         :param SignalSource source: Источник сигнала.
         """
-        super().__init__(sender, signal)
+        super().__init__(sender)
+        self.signal = signal
         self.source = source

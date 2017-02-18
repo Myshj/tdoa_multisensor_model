@@ -4,9 +4,9 @@ from datetime import datetime
 import gevent
 
 from . import messages
-from ActorSystem import Broadcaster
-from ActorSystem.Messages import Broadcast
-from Signals import Sound as SoundSignal
+from actor_system import Broadcaster
+from actor_system.broadcasters.messages import Broadcast
+from signals import Sound as SoundSignal
 from actors.world_related.signal_related.sound_related.sources.Base import Base
 from actors.worlds import Base as World
 from auxillary.Position import Position

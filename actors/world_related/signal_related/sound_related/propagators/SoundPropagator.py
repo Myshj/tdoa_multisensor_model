@@ -3,9 +3,9 @@ import datetime
 
 import gevent
 
-from ActorSystem import Actor
-from ActorSystem.Messages import Message
-from Signals.Sound import Sound as SoundSignal
+from actor_system import Actor
+from actor_system.messages import Message
+from signals.Sound import Sound as SoundSignal
 from actors.world_related.signal_related.sound_related.sensors import SoundSensor
 from actors.world_related.signal_related.sound_related.propagators.Base import Base
 from actors.world_related.signal_related.sound_related.propagators.messages import PropagateSignal

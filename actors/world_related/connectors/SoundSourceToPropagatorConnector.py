@@ -1,12 +1,12 @@
-from ActorSystem.Messages import Message
-from ActorSystem.Messages.ActorActions.ListenerActions import Add as AddListener
-from Signals import Sound
+from actor_system.broadcasters.messages.listener_actions import Add as AddListener
+from actor_system.messages import Message
 from actors.world_related.signal_related.sound_related.propagators import SoundPropagator
 from actors.world_related.signal_related.sound_related.propagators.messages import PropagateSignal
 from actors.world_related.signal_related.sound_related.sources import SoundSource
 from actors.world_related.signal_related.sound_related.sources.messages import SignalGenerated
 from actors.worlds import Base as World
 from auxillary import Position
+from signals import Sound
 from .Base import Base
 
 

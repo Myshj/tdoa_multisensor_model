@@ -3,14 +3,14 @@ from datetime import datetime
 import gevent
 from numpy.linalg import norm
 
-from ActorSystem.Messages.ActorActions.ListenerActions import Add as AddListener
-from Signals import Sound
+from actor_system.broadcasters.messages.listener_actions import Add as AddListener
 from actors.world_related.locators.tdoa import TDOA
 from actors.world_related.locators.tdoa.messages import Locate
 from actors.world_related.signal_related.sound_related.sensors import SoundSensor
 from actors.world_related.signal_related.sound_related.sensors.messages import ReportAboutReceivedSignal
 from actors.worlds import Base as World
 from auxillary import Position
+from signals import Sound
 from .Base import Base
 
 

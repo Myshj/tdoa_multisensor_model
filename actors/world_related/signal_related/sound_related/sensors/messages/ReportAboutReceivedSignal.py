@@ -1,11 +1,11 @@
 from datetime import datetime
 
-from ActorSystem import Actor
+from actor_system import Actor
+from actor_system.messages import Message
 from actors.world_related.signal_related.sound_related.sensors import SoundSensor
-from Messages.Actions.Signal.Base import Base
 
 
-class ReportAboutReceivedSignal(Base):
+class ReportAboutReceivedSignal(Message):
     """
     Сообщение о том, что некий сенсор получил сигнал.
     """
@@ -18,6 +18,7 @@ class ReportAboutReceivedSignal(Base):
         :param datetime when: Когда сигнал был получен.
         :param SoundSensor sensor: Кем сигнал был получен.
         """
-        super().__init__(sender, signal)
+        super().__init__(sender)
+        self.signal = signal
         self.when = when
         self.sensor = sensor

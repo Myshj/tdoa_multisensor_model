@@ -1,4 +1,4 @@
-from ActorSystem import Actor
+from actor_system import Actor
 from auxillary import Position
 from actors.worlds import Base as World
 

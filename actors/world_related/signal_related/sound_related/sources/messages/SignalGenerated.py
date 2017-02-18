@@ -1,5 +1,5 @@
 from actors.world_related.signal_related.sound_related.sources import Base as SignalSource
-from Signals import Base as Signal
+from signals import Base as Signal
 from .Base import Base
 
 

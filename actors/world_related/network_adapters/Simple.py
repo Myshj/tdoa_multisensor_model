@@ -1,7 +1,7 @@
 from .Base import Base
 from auxillary import Position
 from actors.worlds import Base as World
-from ActorSystem import Broadcaster
+from actor_system import Broadcaster
 
 
 class Simple(Base):

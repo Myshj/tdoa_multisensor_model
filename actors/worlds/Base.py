@@ -1,4 +1,4 @@
-from ActorSystem import Actor
+from actor_system import Actor
 
 
 class Base(Actor):

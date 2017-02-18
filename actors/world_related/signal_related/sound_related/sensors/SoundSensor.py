@@ -4,9 +4,9 @@ from datetime import datetime
 import gevent
 from actors.world_related.signal_related.sound_related.sensors.States import States
 
-from ActorSystem import Broadcaster
-from ActorSystem.Messages import Broadcast
-from Messages.Reports import SensorState as SensorStateReports
+from actor_system import Broadcaster
+from actor_system.broadcasters.messages import Broadcast
+from .messages import state_reports
 from actors.world_related.signal_related.sound_related.sensors import messages
 from actors.world_related.signal_related.sound_related.sensors.Base import Base
 from actors.worlds import Base as World
@@ -118,7 +118,7 @@ class SoundSensor(Base):
         self.state_broadcaster.tell(
             Broadcast(
                 sender=self,
-                message=SensorStateReports.Alive(sender=self, sensor=self)
+                message=state_reports.Alive(sender=self, sensor=self)
             )
         )
 
@@ -130,7 +130,7 @@ class SoundSensor(Base):
         self.state_broadcaster.tell(
             Broadcast(
                 sender=self,
-                message=SensorStateReports.Broken(sender=self, sensor=self)
+                message=state_reports.Broken(sender=self, sensor=self)
             )
         )
 

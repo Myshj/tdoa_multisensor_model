@@ -1,12 +1,12 @@
-from .Base import Base
-from auxillary import Position
-from actors.worlds import Base as World
-from actors.world_related.supervisors import SensorOperabilitySupervisor, TDOAGroupSupervisor
-from ActorSystem.Messages import Broadcast, Message
-from ActorSystem.Messages.ActorActions.ListenerActions import Add as AddListener
-from Messages.Actions.Supervisors.SensorOperability import ReconfigurationRequired
+from actor_system.broadcasters.messages.listener_actions import Add as AddListener
+from actor_system.messages import Message
 from actors.world_related.signal_related.sound_related.sensors import States
-from Messages.Actions.Supervisors.TDOA import FormGroups
+from actors.world_related.supervisors import SensorOperabilitySupervisor, TDOAGroupSupervisor
+from actors.world_related.supervisors.sensor_operability.messages import ReconfigurationRequired
+from actors.world_related.supervisors.tdoa_group.messages import FormGroups
+from actors.worlds import Base as World
+from auxillary import Position
+from .Base import Base
 
 
 class SensorSupervisorToTDOAGroupSupervisorConnector(Base):

@@ -1,29 +1,29 @@
 import gevent
 
-import Loaders
+import loaders
 import settings
 from actors.world_related.signal_related.sound_related.propagators import SoundPropagator
 from actors.world_related.connectors import SoundSourceToPropagatorConnector, \
     SensorSupervisorToTDOAGroupSupervisorConnector
 from actors.world_related.supervisors import TDOAGroupSupervisor, SensorOperabilitySupervisor
-from Messages.Actions.Supervisors.TDOA import FormGroups
+from actors.world_related.supervisors.tdoa_group.messages import FormGroups
 from auxillary import Position
 
 if __name__ == '__main__':
-    world_loader = Loaders.WorldLoader(
+    world_loader = loaders.WorldLoader(
         url=settings.worlds_url,
         credentials=settings.credentials
     )
     worlds = world_loader.load_all()
 
-    sensor_loader = Loaders.SensorLoader(
+    sensor_loader = loaders.SensorLoader(
         url=settings.sensors_url,
         credentials=settings.credentials,
         worlds=worlds
     )
     sensors = sensor_loader.load_all()
 
-    sound_source_loader = Loaders.SoundSourceLoader(
+    sound_source_loader = loaders.SoundSourceLoader(
         url=settings.sound_sources_url,
         credentials=settings.credentials,
         worlds=worlds
