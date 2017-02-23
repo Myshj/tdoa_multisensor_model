@@ -1,1 +1,1 @@
-from . import hardware, software
+from .Computer import Computer

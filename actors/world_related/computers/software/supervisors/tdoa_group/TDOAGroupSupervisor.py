@@ -1,7 +1,8 @@
 from actor_system.broadcasters.messages.listener_actions import Add as AddListener
 from actor_system.messages import Message
-from actors.world_related.combination_calculators.tdoa import TDOACombinationCalculator
-from actors.world_related.combination_calculators.tdoa.messages import CalculateCombinations, CombinationsCalculated
+from actors.world_related.computers.software.combination_calculators.tdoa import TDOACombinationCalculator
+from actors.world_related.computers.software.combination_calculators.tdoa.messages import CalculateCombinations, \
+    CombinationsCalculated
 from actors.world_related.computers.software.sensor_groups import TDOASensorGroup
 from actors.world_related.computers.software.supervisors.Base import Base
 from actors.worlds import Base as World

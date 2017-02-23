@@ -6,8 +6,9 @@ from shapely.ops import cascaded_union
 from actor_system import Broadcaster
 from actor_system.broadcasters.messages import Broadcast
 from actor_system.messages import Message
-from actors.world_related.combination_calculators import AbstractCombinationCalculator
-from actors.world_related.combination_calculators.tdoa.messages import CalculateCombinations, CombinationsCalculated
+from actors.world_related.computers.software.combination_calculators import AbstractCombinationCalculator
+from actors.world_related.computers.software.combination_calculators.tdoa.messages import CalculateCombinations, \
+    CombinationsCalculated
 from actors.worlds import Base as World
 from auxillary import Position
 
