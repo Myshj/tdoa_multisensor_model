@@ -1,5 +1,6 @@
-from .Base import Base
 from datetime import datetime
+
+from .Base import Base
 
 
 class Sound(Base):

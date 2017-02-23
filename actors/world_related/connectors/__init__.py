@@ -1,3 +1,3 @@
 from .Base import Base
-from .SoundSourceToPropagatorConnector import SoundSourceToPropagatorConnector
 from .SensorSupervisorToTDOAGroupSupervisorConnector import SensorSupervisorToTDOAGroupSupervisorConnector
+from .SoundSourceToPropagatorConnector import SoundSourceToPropagatorConnector

@@ -1,6 +1,6 @@
-from actors.world_related import Base as WorldRelatedActor
-from auxillary import Position
+from actors.world_related import AbstractWorldRelatedActor as WorldRelatedActor
 from actors.worlds import Base as World
+from auxillary import Position
 
 
 class Base(WorldRelatedActor):

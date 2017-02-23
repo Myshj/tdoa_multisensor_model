@@ -1,2 +1,2 @@
-from .TDOACombinationCalculator import TDOACombinationCalculator
 from . import messages
+from .TDOACombinationCalculator import TDOACombinationCalculator

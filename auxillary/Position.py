@@ -1,5 +1,5 @@
-from shapely.geometry import Point
 import numpy
+from shapely.geometry import Point
 
 
 class Position(object):

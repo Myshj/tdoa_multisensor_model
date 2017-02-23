@@ -1,4 +1,4 @@
-from actors.world_related import Base as WorldRelatedActor
+from actors.world_related import AbstractWorldRelatedActor as WorldRelatedActor
 
 
 class Base(WorldRelatedActor):

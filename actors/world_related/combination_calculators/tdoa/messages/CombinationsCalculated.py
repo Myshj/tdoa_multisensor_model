@@ -1,6 +1,7 @@
-from .Base import Base
-from actor_system import Actor
 from collections import Iterable
+
+from actor_system import Actor
+from .Base import Base
 
 
 class CombinationsCalculated(Base):

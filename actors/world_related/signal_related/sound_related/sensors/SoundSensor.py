@@ -2,15 +2,15 @@ import random
 from datetime import datetime
 
 import gevent
-from actors.world_related.signal_related.sound_related.sensors.States import States
 
 from actor_system import Broadcaster
 from actor_system.broadcasters.messages import Broadcast
-from .messages import state_reports
 from actors.world_related.signal_related.sound_related.sensors import messages
 from actors.world_related.signal_related.sound_related.sensors.Base import Base
+from actors.world_related.signal_related.sound_related.sensors.States import States
 from actors.worlds import Base as World
 from auxillary.Position import Position
+from .messages import state_reports
 
 
 class SoundSensor(Base):

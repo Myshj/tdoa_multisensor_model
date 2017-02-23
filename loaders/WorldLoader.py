@@ -1,5 +1,5 @@
-from .Base import Base
 from actors.worlds import Earth
+from .Base import Base
 
 
 class WorldLoader(Base):

@@ -1,7 +1,9 @@
 import json
+
+import numpy
 import requests
 from shapely.geometry import Point
-import numpy
+
 from auxillary.Position import Position
 
 

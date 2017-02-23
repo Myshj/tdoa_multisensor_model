@@ -4,15 +4,15 @@ from shapely.geometry import MultiPoint
 from shapely.ops import cascaded_union
 
 from actor_system import Broadcaster
-from actor_system.messages import Message
 from actor_system.broadcasters.messages import Broadcast
-from actors.world_related.combination_calculators.Base import Base
+from actor_system.messages import Message
+from actors.world_related.combination_calculators import AbstractCombinationCalculator
 from actors.world_related.combination_calculators.tdoa.messages import CalculateCombinations, CombinationsCalculated
 from actors.worlds import Base as World
 from auxillary import Position
 
 
-class TDOACombinationCalculator(Base):
+class TDOACombinationCalculator(AbstractCombinationCalculator):
     def __init__(self, position: Position, world: World):
         super().__init__(position, world)
         self.groups_formed_broadcaster = Broadcaster()

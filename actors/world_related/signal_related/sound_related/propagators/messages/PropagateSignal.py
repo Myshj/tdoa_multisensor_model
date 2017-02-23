@@ -1,7 +1,7 @@
 from actor_system import Actor
-from signals import Base as Signal
 from actor_system.messages import Message
 from actors.world_related.signal_related.sound_related.sources import Base as SignalSource
+from signals import Base as Signal
 
 
 class PropagateSignal(Message):

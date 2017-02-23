@@ -1,6 +1,6 @@
+from actor_system import Actor
 from actor_system.messages import Message
 from actors.world_related.signal_related.sound_related.sensors import Base as Sensor
-from actor_system import Actor
 
 
 class Base(Message):

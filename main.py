@@ -2,11 +2,12 @@ import gevent
 
 import loaders
 import settings
-from actors.world_related.signal_related.sound_related.propagators import SoundPropagator
+from actors.world_related.computers.software.supervisors.sensor_operability import SensorOperabilitySupervisor
+from actors.world_related.computers.software.supervisors.tdoa_group import TDOAGroupSupervisor
+from actors.world_related.computers.software.supervisors.tdoa_group.messages import FormGroups
 from actors.world_related.connectors import SoundSourceToPropagatorConnector, \
     SensorSupervisorToTDOAGroupSupervisorConnector
-from actors.world_related.supervisors import TDOAGroupSupervisor, SensorOperabilitySupervisor
-from actors.world_related.supervisors.tdoa_group.messages import FormGroups
+from actors.world_related.signal_related.sound_related.propagators import SoundPropagator
 from auxillary import Position
 
 if __name__ == '__main__':
@@ -34,7 +35,7 @@ if __name__ == '__main__':
     source_to_propagator_connector = SoundSourceToPropagatorConnector(
         position=Position(0, 0, 0),
         world=worlds[1],
-        source=sound_sources[1],
+        source=[v for v in sound_sources.values()][0],
         propagator=propagator
     )
 
@@ -49,5 +50,6 @@ if __name__ == '__main__':
     )
     group_supervisor.tell(FormGroups(sender=None, sensors=sensors.values()))
 
+    print('MAUS!')
     while True:
         gevent.sleep(1)
