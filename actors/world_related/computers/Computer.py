@@ -6,6 +6,7 @@ from actors.worlds import Base as World
 from auxillary import Position
 from .messages.actions.hardware_actions import *
 from .messages.events.hardware_events import *
+from .messages.actions.software_actions import *
 
 
 class Computer(AbstractWorldRelatedActor):
@@ -16,7 +17,9 @@ class Computer(AbstractWorldRelatedActor):
     ):
         super().__init__(position, world)
         self.connected_hardware = set()
+        self.installed_software = set()
         self.hardware_events_broadcaster = Broadcaster()
+        self.software_events_broadcaster = Broadcaster()
 
     def on_message(self, message: Message):
         if isinstance(message, AbstractHardwareAction):

@@ -50,7 +50,7 @@ class Actor(object):
         :return:
         """
         if not isinstance(message, Message):
-            raise NotImplementedError()
+            raise ValueError()
         self._inbox.put(message)
 
     def on_message(self, message: Message):

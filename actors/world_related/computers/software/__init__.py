@@ -1,1 +1,1 @@
-from . import sensor_groups
+from .AbstractSoftware import AbstractSoftware
