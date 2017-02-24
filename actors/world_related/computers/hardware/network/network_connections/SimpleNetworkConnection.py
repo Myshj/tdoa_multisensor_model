@@ -64,6 +64,9 @@ class SimpleNetworkConnection(AbstractNetworkConnection):
         if adapter_from == self.adapter_from and adapter_to == self.adapter_to:
             self._transmit_message(message)
 
+    def get_average_latency(self):
+        return (self.possible_latency.right_bound.value + self.possible_latency.left_bound.value) / 2
+
     def _transmit_message(self, message: Message):
         gevent.spawn(self._message_transmission, message=message)
 

@@ -5,8 +5,10 @@ from actors.world_related import AbstractWorldRelatedActor
 from actors.worlds import Base as World
 from auxillary import Position
 from .messages.actions.hardware_actions import *
-from .messages.events.hardware_events import *
 from .messages.actions.software_actions import *
+from .messages.events.hardware_events import *
+from .messages.events.software_events import *
+from .software import AbstractSoftware
 
 
 class Computer(AbstractWorldRelatedActor):
@@ -24,6 +26,8 @@ class Computer(AbstractWorldRelatedActor):
     def on_message(self, message: Message):
         if isinstance(message, AbstractHardwareAction):
             self.on_hardware_action(message)
+        elif isinstance(message, AbstractSoftwareAction):
+            self.on_software_action(message)
 
     def on_hardware_action(self, message: AbstractHardwareAction):
         if isinstance(message, ConnectHardware):
@@ -38,6 +42,46 @@ class Computer(AbstractWorldRelatedActor):
     def on_disconnect_hardware(self, hardware):
         self._disconnect_hardware(hardware)
         self._notify_that_hardware_disconnected(hardware)
+
+    def on_software_action(self, message: AbstractSoftwareAction):
+        if isinstance(message, InstallSoftware):
+            self.on_install_software(message.software)
+
+    def on_install_software(self, software: AbstractSoftware):
+        self._install_software(software)
+        self._notify_that_software_installed(software)
+
+    def on_uninstall_software(self, software: AbstractSoftware):
+        self._uninstall_software(software)
+        self._notify_that_software_uninstalled(software)
+
+    def _install_software(self, software: AbstractSoftware):
+        self.installed_software.add(software)
+
+    def _uninstall_software(self, software: AbstractSoftware):
+        self.installed_software.remove(software)
+
+    def _notify_that_software_installed(self, software: AbstractSoftware):
+        self.software_events_broadcaster.tell(
+            Broadcast(
+                sender=self,
+                message=SoftwareInstalled(
+                    sender=self,
+                    software=software
+                )
+            )
+        )
+
+    def _notify_that_software_uninstalled(self, software: AbstractSoftware):
+        self.software_events_broadcaster.tell(
+            Broadcast(
+                sender=self,
+                message=SoftwareUninstalled(
+                    sender=self,
+                    software=software
+                )
+            )
+        )
 
     def _connect_hardware(self, hardware):
         self.connected_hardware.add(hardware)
