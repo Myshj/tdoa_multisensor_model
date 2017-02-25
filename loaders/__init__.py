@@ -6,3 +6,4 @@ from .WorldRelatedObjectLoader import WorldRelatedObjectLoader
 from .IntervalBoundLoader import IntervalBoundLoader
 from .IntervalLoader import IntervalLoader
 from .NetworkAdapterLoader import NetworkAdapterLoader
+from .NetworkConnectionLoader import NetworkConnectionLoader

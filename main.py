@@ -39,6 +39,15 @@ if __name__ == '__main__':
 
     network_adapters = network_adapters_loader.load_all()
 
+    network_connections_loader = loaders.NetworkConnectionLoader(
+        url=settings.network_connections_url,
+        credentials=settings.credentials,
+        adapters=network_adapters,
+        possible_latencies=intervals
+    )
+
+    network_connections = network_connections_loader.load_all()
+
     sensor_loader = loaders.SensorLoader(
         url=settings.sensors_url,
         credentials=settings.credentials,
