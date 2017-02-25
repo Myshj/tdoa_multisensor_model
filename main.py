@@ -17,6 +17,13 @@ if __name__ == '__main__':
     )
     worlds = world_loader.load_all()
 
+    interval_bound_loader = loaders.IntervalBoundLoader(
+        url=settings.interval_bounds_url,
+        credentials=settings.credentials
+    )
+
+    interval_bounds = interval_bound_loader.load_all()
+
     sensor_loader = loaders.SensorLoader(
         url=settings.sensors_url,
         credentials=settings.credentials,

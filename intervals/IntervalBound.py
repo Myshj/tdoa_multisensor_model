@@ -1,7 +1,7 @@
-from .BoundTypes import BoundType
+from .BoundType import BoundType
 
 
-class Bound(object):
+class IntervalBound(object):
     """
     Граница интервала.
     """

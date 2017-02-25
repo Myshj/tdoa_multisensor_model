@@ -72,7 +72,7 @@ class SimpleNetworkConnection(AbstractNetworkConnection):
 
     def _message_transmission(self, message: Message):
         gevent.sleep(
-            self._determine_latency_of_transmission()
+            self._determine_latency_of_transmission() / 1000
         )
         self.adapter_to.tell(
             ReceiveMessage(

@@ -1,3 +1,3 @@
-from .Bound import Bound
-from .BoundTypes import BoundType
+from .IntervalBound import IntervalBound
+from .BoundType import BoundType
 from .Interval import Interval

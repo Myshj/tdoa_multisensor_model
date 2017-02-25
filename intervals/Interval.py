@@ -1,5 +1,5 @@
-from .Bound import Bound
-from .BoundTypes import BoundType
+from .IntervalBound import IntervalBound
+from .BoundType import BoundType
 
 
 class Interval(object):
@@ -7,11 +7,11 @@ class Interval(object):
     Численный интервал.
     """
 
-    def __init__(self, left_bound: Bound, right_bound: Bound):
+    def __init__(self, left_bound: IntervalBound, right_bound: IntervalBound):
         """
         Конструктор.
-        :param Bound left_bound: Левая граница.
-        :param Bound right_bound: Правая граница.
+        :param IntervalBound left_bound: Левая граница.
+        :param IntervalBound right_bound: Правая граница.
         """
         self.left_bound = left_bound
         self.right_bound = right_bound

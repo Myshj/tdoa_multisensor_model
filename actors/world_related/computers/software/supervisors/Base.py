@@ -1,7 +1,7 @@
-from actors.world_related import AbstractWorldRelatedActor as WorldRelatedActor
+from actors.world_related.computers.software import AbstractSoftware
 
 
-class Base(WorldRelatedActor):
+class Base(AbstractSoftware):
     """
     Базовый класс для всех наблюдателей.
     """

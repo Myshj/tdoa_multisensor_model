@@ -1,12 +1,11 @@
 from actor_system.broadcasters.messages.listener_actions import Add as AddListener
 from actor_system.messages import Message
+from actors.world_related.computers import Computer
 from actors.world_related.computers.software.combination_calculators.tdoa import TDOACombinationCalculator
 from actors.world_related.computers.software.combination_calculators.tdoa.messages import CalculateCombinations, \
     CombinationsCalculated
 from actors.world_related.computers.software.sensor_groups import TDOASensorGroup
 from actors.world_related.computers.software.supervisors.Base import Base
-from actors.worlds import Base as World
-from auxillary import Position
 from .messages import FormGroups
 
 
@@ -15,17 +14,16 @@ class TDOAGroupSupervisor(Base):
     Контроллирует группы звуковых датчиков.
     """
 
-    def __init__(self, position: Position, world: World):
+    def __init__(self, computer: Computer):
         """
         Конструктор.
-        :param Position position: Позиция актора в мире.
-        :param World world: Мир, к которому прикреплён актор.
+        :param Computer computer: Компьютер, на котором установлена программа.
         """
-        super().__init__(position, world)
+        super().__init__(computer)
         self.groups = set()
         self._combination_calculator = TDOACombinationCalculator(
-            position=self.position,
-            world=self.world
+            position=None,
+            world=None
         )
         self._combination_calculator.groups_formed_broadcaster.tell(
             AddListener(
@@ -70,8 +68,7 @@ class TDOAGroupSupervisor(Base):
         """
         self.groups = {
             TDOASensorGroup(
-                position=Position(0, 0, 0),
-                world=self.world,
+                computer=self.computer,
                 sensors=combination
             ) for combination in combinations
             }
