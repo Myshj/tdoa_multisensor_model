@@ -31,6 +31,14 @@ if __name__ == '__main__':
     )
     intervals = intervals_loader.load_all()
 
+    network_adapters_loader = loaders.NetworkAdapterLoader(
+        url=settings.network_adapters_url,
+        credentials=settings.credentials,
+        worlds=worlds
+    )
+
+    network_adapters = network_adapters_loader.load_all()
+
     sensor_loader = loaders.SensorLoader(
         url=settings.sensors_url,
         credentials=settings.credentials,
