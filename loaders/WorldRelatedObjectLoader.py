@@ -1,7 +1,7 @@
-from .Base import Base
+from .AbstractLoader import AbstractLoader
 
 
-class WorldRelatedObjectLoader(Base):
+class WorldRelatedObjectLoader(AbstractLoader):
     """
     Загружает связанные с мирами объекты.
     """

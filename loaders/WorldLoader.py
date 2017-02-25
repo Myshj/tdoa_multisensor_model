@@ -1,8 +1,8 @@
 from actors.worlds import Earth
-from .Base import Base
+from .AbstractLoader import AbstractLoader
 
 
-class WorldLoader(Base):
+class WorldLoader(AbstractLoader):
     """
     Загружает сенсоры из базы данных.
     """

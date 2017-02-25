@@ -1,8 +1,8 @@
 from intervals import IntervalBound, BoundType
-from .Base import Base
+from .AbstractLoader import AbstractLoader
 
 
-class IntervalBoundLoader(Base):
+class IntervalBoundLoader(AbstractLoader):
     """
     Загружает границы интервалов из базы данных.
     """

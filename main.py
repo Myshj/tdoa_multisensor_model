@@ -24,6 +24,13 @@ if __name__ == '__main__':
 
     interval_bounds = interval_bound_loader.load_all()
 
+    intervals_loader = loaders.IntervalLoader(
+        url=settings.intervals_url,
+        credentials=settings.credentials,
+        interval_bounds=interval_bounds
+    )
+    intervals = intervals_loader.load_all()
+
     sensor_loader = loaders.SensorLoader(
         url=settings.sensors_url,
         credentials=settings.credentials,

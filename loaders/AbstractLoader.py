@@ -1,7 +1,7 @@
 from auxillary import functions
 
 
-class Base(object):
+class AbstractLoader(object):
     """
     Базовый класс для всех загрузчиков акторов.
     """
