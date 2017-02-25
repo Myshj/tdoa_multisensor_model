@@ -3,14 +3,12 @@ from datetime import datetime
 import gevent
 from actors.world_related.computers.software.locators.tdoa import TDOA
 from numpy.linalg import norm
-
+from actors.world_related.computers import Computer
 from actor_system.broadcasters.messages.listener_actions import Add as AddListener
 from actors.world_related.computers.software.locators.tdoa.messages import Locate
 from actors.world_related.computers.software.sensor_groups import AbstractSensorGroup
 from actors.world_related.signal_related.sound_related.sensors import SoundSensor
 from actors.world_related.signal_related.sound_related.sensors.messages import ReportAboutReceivedSignal
-from actors.worlds import Base as World
-from auxillary import Position
 from signals import Sound
 
 
@@ -33,14 +31,13 @@ class TDOASensorGroup(AbstractSensorGroup):
     """
     multiplier_for_max_wait_time = 1.1
 
-    def __init__(self, position: Position, world: World, sensors: list):
+    def __init__(self, computer: Computer, sensors: list):
         """
         Конструктор.
-        :param Position position: Позиция актора в мире.
-        :param World world: Мир, к которому прикреплён актор.
+        :param computer: Компьютер, на котором установлена программа.
         :param list(SoundSensor) sensors: Список связанных датчиков.
         """
-        super().__init__(position, world)
+        super().__init__(computer)
         self.sensors = sensors
         self._just_received_signal = False
         self._initialize_locator()
@@ -138,7 +135,8 @@ class TDOASensorGroup(AbstractSensorGroup):
                 stop_position = stop_sensor.position.as_array()
                 distance = norm(start_position - stop_position)
                 max_distance = max([max_distance, distance])
-        self._max_wait_time = (max_distance / self.world.speed_of_sound) * TDOASensorGroup.multiplier_for_max_wait_time
+        self._max_wait_time = (
+                              max_distance / self.computer.world.speed_of_sound) * TDOASensorGroup.multiplier_for_max_wait_time
 
     def _initialize_locator(self):
         """
@@ -146,8 +144,8 @@ class TDOASensorGroup(AbstractSensorGroup):
         :return:
         """
         self.locator = TDOA(
-            position=self.position,
-            world=self.world
+            position=None,
+            world=None
         )
 
     def _listen_for_sensor_signals(self):

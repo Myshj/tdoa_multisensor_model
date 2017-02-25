@@ -1,7 +1,7 @@
-from actors.world_related import AbstractWorldRelatedActor as WorldRelatedActor
+from actors.world_related.computers.software import AbstractSoftware
 
 
-class AbstractSensorGroup(WorldRelatedActor):
+class AbstractSensorGroup(AbstractSoftware):
     """
     Базовый класс для всех групп датчиков.
     """
