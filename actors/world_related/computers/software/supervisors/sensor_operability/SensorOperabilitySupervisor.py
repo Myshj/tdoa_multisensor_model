@@ -9,6 +9,7 @@ from actors.world_related.computers.software.supervisors.Base import Base
 from actors.world_related.signal_related.sound_related.sensors import States, Base as Sensor
 from actors.world_related.signal_related.sound_related.sensors.messages import state_reports
 from actors.worlds import Base as World
+from actors.world_related.computers import Computer
 from auxillary import Position
 from .messages import ReconfigurationRequired
 
@@ -18,14 +19,13 @@ class SensorOperabilitySupervisor(Base):
     Наблюдатель за работоспособностью датчиков.
     """
 
-    def __init__(self, position: Position, world: World, sensors: list):
+    def __init__(self, computer: Computer, sensors: list):
         """
         Конструктор.
-        :param Position position: Позиция актора в мире.
-        :param World world: Мир, к которому прикреплён актор.
+        :param computer: Компьютер, на котором работает программа.
         :param list sensors: Датчики, за которыми наблюдает актор.
         """
-        super().__init__(position=position, world=world)
+        super().__init__(computer)
         self._broken_sensors = set()
         self.reconfiguration_required_broadcaster = Broadcaster()
         self._initialize_tables(sensors)

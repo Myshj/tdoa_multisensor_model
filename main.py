@@ -55,6 +55,17 @@ if __name__ == '__main__':
     )
     sensors = sensor_loader.load_all()
 
+    computers_loader = loaders.ComputerLoader(
+        url=settings.computers_url,
+        credentials=settings.credentials,
+        worlds=worlds,
+        sensors=sensors,
+        network_adapters=network_adapters
+    )
+
+    computers = computers_loader.load_all()
+    gevent.sleep(1)
+
     sound_source_loader = loaders.SoundSourceLoader(
         url=settings.sound_sources_url,
         credentials=settings.credentials,
@@ -62,7 +73,9 @@ if __name__ == '__main__':
     )
     sound_sources = sound_source_loader.load_all()
 
-    propagator = SoundPropagator(position=Position(0, 0, 0), world=worlds[1], sensors=sensors.values())
+    real_sensors = [sensor for sensor in sensors.values()]
+
+    propagator = SoundPropagator(position=Position(0, 0, 0), world=worlds[1], sensors=real_sensors)
     source_to_propagator_connector = SoundSourceToPropagatorConnector(
         position=Position(0, 0, 0),
         world=worlds[1],
@@ -70,16 +83,26 @@ if __name__ == '__main__':
         propagator=propagator
     )
 
-    group_supervisor = TDOAGroupSupervisor(position=Position(0, 0, 0), world=worlds[1])
-    operability_supervisor = SensorOperabilitySupervisor(position=Position(0, 0, 0), world=worlds[1],
-                                                         sensors=sensors.values())
+    # group_supervisor = TDOAGroupSupervisor(position=Position(0, 0, 0), world=worlds[1])
+    group_supervisors = []
+    for computer in computers.values():
+        for supervisor in [
+            supervisor for supervisor in filter(
+                lambda software: isinstance(software, TDOAGroupSupervisor),
+                computer.installed_software
+            )
+            ]:
+            group_supervisors.append(supervisor)
+    group_supervisor = group_supervisors[0]
+    operability_supervisor = SensorOperabilitySupervisor(computer=group_supervisor.computer,
+                                                         sensors=real_sensors)
     sensor_supervisor_to_group_supervisor_connector = SensorSupervisorToTDOAGroupSupervisorConnector(
         position=Position(0, 0, 0),
         world=worlds[1],
         sensor_operability_supervisor=operability_supervisor,
         tdoa_group_supervisor=group_supervisor
     )
-    group_supervisor.tell(FormGroups(sender=None, sensors=sensors.values()))
+    group_supervisor.tell(FormGroups(sender=None, sensors=real_sensors))
 
     print('MAUS!')
     while True:

@@ -48,6 +48,7 @@ class SoundSensor(Base):
         self.state = state
 
     def on_message(self, message):
+        # print('sensor received message')
         if isinstance(message, messages.ReceiveSignal):
             self.on_signal_received(message.signal, message.when)
 
@@ -62,6 +63,7 @@ class SoundSensor(Base):
         :param datetime when: Когда сигнал был получен.
         :return:
         """
+        #Аprint('signal received')
         if self.state == States.Working:
             self._notify_about_received_signal(signal, when)
 

@@ -34,9 +34,13 @@ class TDOAGroupSupervisor(Base):
 
     def on_message(self, message: Message):
         if isinstance(message, FormGroups):
+            print('on_form_groups started')
             self.on_form_groups(sensors=message.sensors)
+            print('on_form_groups stopped')
         elif isinstance(message, CombinationsCalculated):
+            print('on_combination_calculated started')
             self.on_combinations_calculated(sensors=message.sensors, combinations=message.combinations)
+            print('on_combination_calculated stopped')
 
     def on_form_groups(self, sensors: list):
         """
@@ -50,6 +54,7 @@ class TDOAGroupSupervisor(Base):
     def on_combinations_calculated(self, sensors: list, combinations: set):
         self._stop_old_groups()
         self._form_new_groups(sensors=sensors, combinations=combinations)
+        print('groups formed')
 
     def _form_combinations(self, sensors: list):
         self._combination_calculator.tell(

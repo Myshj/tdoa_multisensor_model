@@ -38,6 +38,7 @@ class SoundPropagator(Base):
         :param list sensors: Датчики.
         :return:
         """
+        # print('signal propagated')
         self._propagate_signal(
             signal=signal,
             source=source,
@@ -58,6 +59,7 @@ class SoundPropagator(Base):
                 source=source,
                 sensor=sensor
             )
+            gevent.sleep()
 
     def _prepare_signal_sending(
             self,

@@ -61,6 +61,7 @@ class SimpleNetworkConnection(AbstractNetworkConnection):
             adapter_to: SimpleNetworkAdapter,
             message: Message
     ):
+        print('adapter_wants_to_transmit_message')
         if adapter_from == self.adapter_from and adapter_to == self.adapter_to:
             self._transmit_message(message)
 

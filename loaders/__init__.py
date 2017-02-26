@@ -7,3 +7,4 @@ from .IntervalBoundLoader import IntervalBoundLoader
 from .IntervalLoader import IntervalLoader
 from .NetworkAdapterLoader import NetworkAdapterLoader
 from .NetworkConnectionLoader import NetworkConnectionLoader
+from .ComputerLoader import ComputerLoader

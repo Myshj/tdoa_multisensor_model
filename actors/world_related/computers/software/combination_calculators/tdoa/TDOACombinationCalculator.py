@@ -28,7 +28,9 @@ class TDOACombinationCalculator(AbstractCombinationCalculator):
         :param list sensors: Датчики, из которых нужно сформировать группы.
         :return:
         """
+        # print('form_groups started')
         self._form_groups(sensors=sensors)
+        #print('form_groups started')
 
     def _form_groups(self, sensors: list):
         """
@@ -37,6 +39,7 @@ class TDOACombinationCalculator(AbstractCombinationCalculator):
         :param list sensors: Датчики, из которых нужно сформировать группы.
         :return:
         """
+
         good_combinations = self._find_all_good_combinations(sensors)
         combinations_to_return = self._find_combinations_to_return(sensors, good_combinations)
 

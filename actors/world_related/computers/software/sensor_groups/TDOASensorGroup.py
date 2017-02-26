@@ -136,7 +136,7 @@ class TDOASensorGroup(AbstractSensorGroup):
                 distance = norm(start_position - stop_position)
                 max_distance = max([max_distance, distance])
         self._max_wait_time = (
-                              max_distance / self.computer.world.speed_of_sound) * TDOASensorGroup.multiplier_for_max_wait_time
+                                  max_distance / self.computer.world.speed_of_sound) * TDOASensorGroup.multiplier_for_max_wait_time + 0.5
 
     def _initialize_locator(self):
         """
@@ -145,7 +145,7 @@ class TDOASensorGroup(AbstractSensorGroup):
         """
         self.locator = TDOA(
             position=None,
-            world=None
+            world=self.computer.world
         )
 
     def _listen_for_sensor_signals(self):
