@@ -1,9 +1,11 @@
+from actors.world_related.computers.software.servers.supervisors.sensor_operability import SensorOperabilitySupervisor
+from actors.world_related.computers.software.servers.supervisors.tdoa_group import TDOAGroupSupervisor
+from actors.world_related.computers.software.servers.supervisors.tdoa_group.messages import FormGroups
+
 from actor_system.broadcasters.messages.listener_actions import Add as AddListener
 from actor_system.messages import Message
-from actors.world_related.computers.software.supervisors.sensor_operability import SensorOperabilitySupervisor
-from actors.world_related.computers.software.supervisors.sensor_operability.messages import ReconfigurationRequired
-from actors.world_related.computers.software.supervisors.tdoa_group import TDOAGroupSupervisor
-from actors.world_related.computers.software.supervisors.tdoa_group.messages import FormGroups
+from actors.world_related.computers.software.servers.supervisors.sensor_operability.messages import \
+    ReconfigurationRequired
 from actors.world_related.signal_related.sound_related.sensors import States
 from actors.worlds import Base as World
 from auxillary import Position
@@ -55,7 +57,7 @@ class SensorSupervisorToTDOAGroupSupervisorConnector(Base):
         self.tdoa_group_supervisor.tell(
             FormGroups(
                 sender=self,
-                sensors=sensors
+                sensor_controllers=sensors
             )
         )
 

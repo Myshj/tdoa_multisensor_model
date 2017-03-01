@@ -4,8 +4,8 @@ from actors.world_related.computers import Computer
 from actors.world_related.computers.software.combination_calculators.tdoa import TDOACombinationCalculator
 from actors.world_related.computers.software.combination_calculators.tdoa.messages import CalculateCombinations, \
     CombinationsCalculated
-from actors.world_related.computers.software.sensor_groups import TDOASensorGroup
-from actors.world_related.computers.software.supervisors.Base import Base
+from actors.world_related.computers.software.servers.sensor_groups import TDOASensorGroup
+from actors.world_related.computers.software.servers.supervisors.Base import Base
 from .messages import FormGroups
 
 
@@ -35,46 +35,47 @@ class TDOAGroupSupervisor(Base):
     def on_message(self, message: Message):
         if isinstance(message, FormGroups):
             print('on_form_groups started')
-            self.on_form_groups(sensors=message.sensors)
+            self.on_form_groups(sensor_controllers=message.sensor_controllers)
             print('on_form_groups stopped')
         elif isinstance(message, CombinationsCalculated):
             print('on_combination_calculated started')
-            self.on_combinations_calculated(sensors=message.sensors, combinations=message.combinations)
+            self.on_combinations_calculated(sensor_controllers=message.sensor_controllers,
+                                            combinations=message.combinations)
             print('on_combination_calculated stopped')
 
-    def on_form_groups(self, sensors: list):
+    def on_form_groups(self, sensor_controllers: list):
         """
         Вызывается каждый раз при необходимости формирования групп из датчиков.
-        :param list sensors: Датчики, из которых нужно сформировать группы.
+        :param list sensor_controllers: Контроллеры датчиков, из которых нужно сформировать группы.
         :return:
         """
         self._stop_old_groups()
-        self._form_combinations(sensors)
+        self._form_combinations(sensor_controllers)
 
-    def on_combinations_calculated(self, sensors: list, combinations: set):
+    def on_combinations_calculated(self, sensor_controllers: list, combinations: set):
         self._stop_old_groups()
-        self._form_new_groups(sensors=sensors, combinations=combinations)
+        self._form_new_groups(sensor_controllers=sensor_controllers, combinations=combinations)
         print('groups formed')
 
-    def _form_combinations(self, sensors: list):
+    def _form_combinations(self, sensor_controllers: list):
         self._combination_calculator.tell(
             CalculateCombinations(
                 sender=self,
-                sensors=sensors
+                sensor_controllers=sensor_controllers
             )
         )
 
-    def _form_new_groups(self, sensors: list, combinations: set):
+    def _form_new_groups(self, sensor_controllers: list, combinations: set):
         """
         Вызывается каждый раз при необходимости формирования групп из датчиков.
-        :param list sensors: Датчики, из которых нужно сформировать группы.
+        :param list sensor_controllers: Датчики, из которых нужно сформировать группы.
         :param set combinations: Подходящие для групп комбинации датчиков.
         :return:
         """
         self.groups = {
             TDOASensorGroup(
                 computer=self.computer,
-                sensors=combination
+                sensor_controllers=combination
             ) for combination in combinations
             }
 

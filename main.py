@@ -1,10 +1,12 @@
 import gevent
-
+from actors.world_related.computers.software.servers.supervisors.sensor_operability import SensorOperabilitySupervisor
+from actors.world_related.computers.software.servers.supervisors.tdoa_group import TDOAGroupSupervisor
+from actors.world_related.computers.software.sensor_controllers.sound_related.simple import SimpleSoundSensorController
+from actors.world_related.computers.software.routers.simple import SimpleRouter
+from actors.world_related.computers.messages.actions.software_actions import InstallSoftware
 import loaders
 import settings
-from actors.world_related.computers.software.supervisors.sensor_operability import SensorOperabilitySupervisor
-from actors.world_related.computers.software.supervisors.tdoa_group import TDOAGroupSupervisor
-from actors.world_related.computers.software.supervisors.tdoa_group.messages import FormGroups
+from actors.world_related.computers.software.servers.supervisors.tdoa_group.messages import FormGroups
 from actors.world_related.connectors import SoundSourceToPropagatorConnector, \
     SensorSupervisorToTDOAGroupSupervisorConnector
 from actors.world_related.signal_related.sound_related.propagators import SoundPropagator
@@ -64,6 +66,20 @@ if __name__ == '__main__':
     )
 
     computers = computers_loader.load_all()
+
+    for computer in computers.values():
+        computer.tell(
+            InstallSoftware(
+                sender=None,
+                software=SimpleRouter(
+                    computer=computer,
+                    known_computers=set(computers.values()),
+                    network_connections=set(network_connections.values())
+                )
+            )
+        )
+        gevent.sleep()
+
     gevent.sleep(1)
 
     sound_source_loader = loaders.SoundSourceLoader(
@@ -102,7 +118,14 @@ if __name__ == '__main__':
         sensor_operability_supervisor=operability_supervisor,
         tdoa_group_supervisor=group_supervisor
     )
-    group_supervisor.tell(FormGroups(sender=None, sensors=real_sensors))
+
+    sensor_controllers = set()
+    for computer in computers.values():
+        for sensor_controller in filter(lambda software: isinstance(software, SimpleSoundSensorController),
+                                        computer.installed_software):
+            sensor_controllers.add(sensor_controller)
+
+    group_supervisor.tell(FormGroups(sender=None, sensor_controllers=sensor_controllers))
 
     print('MAUS!')
     while True:

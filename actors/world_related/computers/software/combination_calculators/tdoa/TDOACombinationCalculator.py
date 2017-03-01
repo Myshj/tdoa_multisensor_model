@@ -20,54 +20,54 @@ class TDOACombinationCalculator(AbstractCombinationCalculator):
 
     def on_message(self, message: Message):
         if isinstance(message, CalculateCombinations):
-            self.on_form_groups(message.sensors)
+            self.on_calculate_combinations(message.sensor_controllers)
 
-    def on_form_groups(self, sensors: list):
+    def on_calculate_combinations(self, sensor_controllers: list):
         """
         Вызывается каждый раз при необходимости формирования групп датчиков.
-        :param list sensors: Датчики, из которых нужно сформировать группы.
+        :param list sensor_controllers: Датчики, из которых нужно сформировать группы.
         :return:
         """
         # print('form_groups started')
-        self._form_groups(sensors=sensors)
+        self._calculate_combinations(sensor_controllers=sensor_controllers)
         #print('form_groups started')
 
-    def _form_groups(self, sensors: list):
+    def _calculate_combinations(self, sensor_controllers: list):
         """
         Сформировать группы из датчиков.
         НЕ ВСЕГДА ДАЁТ ОПТИМАЛЬНЫЙ РЕЗУЛЬТАТ.
-        :param list sensors: Датчики, из которых нужно сформировать группы.
+        :param list sensor_controllers: Датчики, из которых нужно сформировать группы.
         :return:
         """
 
-        good_combinations = self._find_all_good_combinations(sensors)
-        combinations_to_return = self._find_combinations_to_return(sensors, good_combinations)
+        good_combinations = self._find_all_good_combinations(sensor_controllers)
+        combinations_to_return = self._find_combinations_to_return(sensor_controllers, good_combinations)
 
         self.groups_formed_broadcaster.tell(
             Broadcast(
                 sender=self,
                 message=CombinationsCalculated(
                     sender=self,
-                    sensors=sensors,
+                    sensor_controllers=sensor_controllers,
                     combinations=combinations_to_return
                 )
             )
         )
 
-    def _find_combinations_to_return(self, sensors: list, good_combinations: set):
+    def _find_combinations_to_return(self, sensor_controllers: list, good_combinations: set):
         """
         Для заданных датчиков находит самые лучшие из возможных комбинаций.
-        :param list sensors: Датчики, из которых нужно сформировать группы.
+        :param list sensor_controllers: Датчики, из которых нужно сформировать группы.
         :param set good_combinations: Возможные комбинации датчиков.
         :return:
         """
         sensor_to_figure_table = {
-            sensor: sensor.position.as_point() for sensor in sensors
+            sensor_controller: sensor_controller.sensor.position.as_point() for sensor_controller in sensor_controllers
             }
 
         forms_from_combinations = {
             combination: MultiPoint(
-                [sensor_to_figure_table[sensor] for sensor in combination]
+                [sensor_to_figure_table[sensor_controller] for sensor_controller in combination]
             ).convex_hull for combination in good_combinations
             }
 
@@ -88,21 +88,21 @@ class TDOACombinationCalculator(AbstractCombinationCalculator):
 
         return combinations_to_return
 
-    def _find_all_good_combinations(self, sensors: list):
+    def _find_all_good_combinations(self, sensor_controllers: list):
         """
         Найти все подходящие пятёрки датчиков.
-        :param list sensors: Датчики, из которых нужно сформировать пятёрки.
+        :param list sensor_controllers: Датчики, из которых нужно сформировать пятёрки.
         :return:
         """
         good_combinations = set()
-        for sensor in sensors:
+        for sensor_controller in sensor_controllers:
             # Определили тех, кто может услышать текущего И кого может услышать текущий
             candidates_for_group = {
                 candidate for candidate in
                 filter(
-                    lambda other: other.radius >= sensor.position.as_point().distance(
-                        other.position.as_point()) <= sensor.radius,
-                    sensors
+                    lambda other: other.sensor.radius >= sensor_controller.sensor.position.as_point().distance(
+                        other.sensor.position.as_point()) <= sensor_controller.sensor.radius,
+                    sensor_controllers
                 )
                 }
 
@@ -111,8 +111,8 @@ class TDOACombinationCalculator(AbstractCombinationCalculator):
                 combination = frozenset(
                     candidate for candidate in combination if all(
                         map(
-                            lambda other: other.radius >= candidate.position.as_point().distance(
-                                other.position.as_point()) <= candidate.radius,
+                            lambda other: other.sensor.radius >= candidate.sensor.position.as_point().distance(
+                                other.sensor.position.as_point()) <= candidate.sensor.radius,
                             combination
                         )
                     )

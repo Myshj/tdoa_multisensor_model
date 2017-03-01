@@ -25,6 +25,7 @@ class SimpleNetworkConnection(AbstractNetworkConnection):
         super().__init__()
         self._initialize_possible_latency(possible_latency)
         self._initialize_adapters(adapter_from, adapter_to)
+        self._start_listening()
 
     def _initialize_adapters(self, adapter_from: SimpleNetworkAdapter, adapter_to: SimpleNetworkAdapter):
         self._initialize_adapter_from(adapter_from)
@@ -40,7 +41,7 @@ class SimpleNetworkConnection(AbstractNetworkConnection):
         self.possible_latency = possible_latency
 
     def _start_listening(self):
-        self.adapter_to.want_to_transmit_message_broadcaster.tell(
+        self.adapter_from.want_to_transmit_message_broadcaster.tell(
             Add(
                 sender=self,
                 actor=self
@@ -61,7 +62,7 @@ class SimpleNetworkConnection(AbstractNetworkConnection):
             adapter_to: SimpleNetworkAdapter,
             message: Message
     ):
-        print('adapter_wants_to_transmit_message')
+        # print('adapter_wants_to_transmit_message')
         if adapter_from == self.adapter_from and adapter_to == self.adapter_to:
             self._transmit_message(message)
 

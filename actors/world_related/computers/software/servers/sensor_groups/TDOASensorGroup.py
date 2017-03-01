@@ -1,12 +1,14 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import gevent
-from actors.world_related.computers.software.locators.tdoa import TDOA
 from numpy.linalg import norm
+
 from actors.world_related.computers import Computer
-from actor_system.broadcasters.messages.listener_actions import Add as AddListener
+from actors.world_related.computers.software.locators.tdoa import TDOA
 from actors.world_related.computers.software.locators.tdoa.messages import Locate
-from actors.world_related.computers.software.sensor_groups import AbstractSensorGroup
+from actors.world_related.computers.software.sensor_controllers.sound_related.simple.messages.group_operations import \
+    ReportToThisGroup
+from actors.world_related.computers.software.servers.sensor_groups import AbstractSensorGroup
 from actors.world_related.signal_related.sound_related.sensors import SoundSensor
 from actors.world_related.signal_related.sound_related.sensors.messages import ReportAboutReceivedSignal
 from signals import Sound
@@ -31,14 +33,14 @@ class TDOASensorGroup(AbstractSensorGroup):
     """
     multiplier_for_max_wait_time = 1.1
 
-    def __init__(self, computer: Computer, sensors: list):
+    def __init__(self, computer: Computer, sensor_controllers: list):
         """
         Конструктор.
         :param computer: Компьютер, на котором установлена программа.
-        :param list(SoundSensor) sensors: Список связанных датчиков.
+        :param list(SimpleSoundSensorController) sensor_controllers: Список связанных контроллеров датчиков.
         """
         super().__init__(computer)
-        self.sensors = sensors
+        self.sensor_controllers = sensor_controllers
         self._just_received_signal = False
         self._initialize_locator()
         self._initialize_max_wait_time()
@@ -60,6 +62,8 @@ class TDOASensorGroup(AbstractSensorGroup):
         :param SoundSensor sensor: Датчик, получивший сигнал.
         :return:
         """
+        if sensor not in map(lambda sensor_controller: sensor_controller.sensor, self.sensor_controllers):
+            return
         self._determine_what_to_do_with_signal(
             signal=signal,
             when_received=when_received,
@@ -79,6 +83,8 @@ class TDOASensorGroup(AbstractSensorGroup):
             self._last_sensor_report_times = {}
             self._just_received_signal = True
             gevent.spawn(self._wait_for_max_wait_time)
+
+            # print('Сигнал был сгенерирован: {0}, будет распознан: {1}'.format(when_received, datetime.now() + timedelta(seconds=self._max_wait_time)))
         self._last_sensor_report_times[sensor] = when_received
 
     def _wait_for_max_wait_time(self):
@@ -104,14 +110,18 @@ class TDOASensorGroup(AbstractSensorGroup):
         Выдача команды локатору на обнаружение объекта.
         :return:
         """
+        for sensor_controller in self.sensor_controllers:
+            if sensor_controller.sensor not in self._last_sensor_report_times.keys():
+                print('dfdf')
         self.locator.tell(
             Locate(
                 sender=self,
                 time_delays_table={
-                    sensor: (
-                        self._last_sensor_report_times[sensor] - self._last_started_activity_time
+                    sensor_controller.sensor: (
+                        self._last_sensor_report_times[sensor_controller.sensor] - self._last_started_activity_time
+                    # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                     ).total_seconds()
-                    for sensor in self.sensors
+                    for sensor_controller in self.sensor_controllers
                     }
             )
         )
@@ -129,10 +139,10 @@ class TDOASensorGroup(AbstractSensorGroup):
         :return:
         """
         max_distance = 0.0
-        for start_sensor in self.sensors:
-            start_position = start_sensor.position.as_array()
-            for stop_sensor in self.sensors:
-                stop_position = stop_sensor.position.as_array()
+        for start_sensor in self.sensor_controllers:
+            start_position = start_sensor.sensor.position.as_array()
+            for stop_sensor in self.sensor_controllers:
+                stop_position = stop_sensor.sensor.position.as_array()
                 distance = norm(start_position - stop_position)
                 max_distance = max([max_distance, distance])
         self._max_wait_time = (
@@ -153,5 +163,11 @@ class TDOASensorGroup(AbstractSensorGroup):
         Начать ожидание сигналов от датчиков.
         :return:
         """
-        for sensor_actor in self.sensors:
-            sensor_actor.signal_received_broadcaster.tell(AddListener(self, self))
+        for sensor_controller in self.sensor_controllers:
+            sensor_controller.tell(
+                ReportToThisGroup(
+                    sender=self,
+                    sensor_group=self
+                )
+            )
+            #sensor_controller.signal_received_broadcaster.tell(AddListener(self, self))

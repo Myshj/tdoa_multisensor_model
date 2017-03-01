@@ -1,12 +1,12 @@
-from .WorldRelatedObjectLoader import WorldRelatedObjectLoader
-from auxillary import functions
+from actors.world_related.computers import Computer
 from actors.world_related.computers.messages.actions.hardware_actions import ConnectHardware
 from actors.world_related.computers.messages.actions.software_actions import InstallSoftware
-from actors.world_related.computers import Computer
-from auxillary import Position
-import gevent
 from actors.world_related.computers.software.sensor_controllers.sound_related.simple import SimpleSoundSensorController
-from actors.world_related.computers.software.supervisors.tdoa_group import TDOAGroupSupervisor
+from actors.world_related.computers.software.servers.supervisors.tdoa_group import TDOAGroupSupervisor
+from auxillary import Position
+from auxillary import functions
+from .WorldRelatedObjectLoader import WorldRelatedObjectLoader
+import gevent
 
 
 class ComputerLoader(WorldRelatedObjectLoader):
@@ -67,6 +67,7 @@ class ComputerLoader(WorldRelatedObjectLoader):
                     hardware=hardware
                 )
             )
+            gevent.sleep()
 
         if actor_info['is_active_sensor_controller']:
             for sensor in sensors:
@@ -76,6 +77,8 @@ class ComputerLoader(WorldRelatedObjectLoader):
                         software=SimpleSoundSensorController(computer, sensor)
                     )
                 )
+            gevent.sleep()
+
         if actor_info['is_active_tdoa_controller']:
             computer.tell(
                 InstallSoftware(
@@ -83,5 +86,6 @@ class ComputerLoader(WorldRelatedObjectLoader):
                     software=TDOAGroupSupervisor(computer)
                 )
             )
+            gevent.sleep()
 
         return computer

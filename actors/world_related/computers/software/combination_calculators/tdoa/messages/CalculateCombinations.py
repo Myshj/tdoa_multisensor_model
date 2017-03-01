@@ -9,11 +9,11 @@ class CalculateCombinations(Base):
     Сообщение о том, что из списка сенсоров нужно сформировать комбинации.
     """
 
-    def __init__(self, sender: Actor, sensors: Iterable):
+    def __init__(self, sender: Actor, sensor_controllers: Iterable):
         """
         Конструктор.
         :param Actor sender: Адресант сообщения.
-        :param Iterable sensors: Сенсоры, из которых нужно сформировать комбинации.
+        :param Iterable sensor_controllers: Сенсоры, из которых нужно сформировать комбинации.
         """
         super().__init__(sender)
-        self.sensors = sensors
+        self.sensor_controllers = sensor_controllers

@@ -5,7 +5,7 @@ from actors.world_related.computers.messages.events.hardware_events import *
 from actors.world_related.computers.software.routers.simple import SimpleRouter
 from actors.world_related.computers.software.routers.simple.messages import SendMessageToComputer
 from actors.world_related.computers.software.sensor_controllers.sound_related import AbstractSoundSensorController
-from actors.world_related.computers.software.sensor_groups import TDOASensorGroup
+from actors.world_related.computers.software.servers.sensor_groups import TDOASensorGroup
 from actors.world_related.signal_related.sound_related.sensors import SoundSensor
 from actors.world_related.signal_related.sound_related.sensors.messages import ReportAboutReceivedSignal
 from .messages.group_operations import *
@@ -66,7 +66,8 @@ class SimpleSoundSensorController(AbstractSoundSensorController):
 
     def _notify_related_group(self, sensor_group: TDOASensorGroup, message: ReportAboutReceivedSignal):
         router = tuple(
-            router for router in filter(lambda software: isinstance(software, SimpleRouter), self.computer)
+            router for router in
+            filter(lambda software: isinstance(software, SimpleRouter), self.computer.installed_software)
         )[0]
 
         router.tell(

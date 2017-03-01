@@ -28,15 +28,15 @@ class SimpleRouter(AbstractRouter):
         return computer in self.known_computers
 
     def _send_message_to_computer(self, message: Message, computer_to: Computer):
-        our_network_adapters = filter(
+        our_network_adapters = set(filter(
             lambda hardware: isinstance(hardware, SimpleNetworkAdapter),
             self.computer.connected_hardware
-        )
+        ))
 
-        remote_network_adapters = filter(
+        remote_network_adapters = set(filter(
             lambda hardware: isinstance(hardware, SimpleNetworkAdapter),
             computer_to.connected_hardware
-        )
+        ))
 
         possible_connections = [connection for connection in filter(
             lambda network_connection:
