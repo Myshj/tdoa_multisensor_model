@@ -16,10 +16,9 @@ class SimpleSoundSensorController(AbstractSoundSensorController):
     Простейший контроллер звуковых датчиков.
     """
 
-    def __init__(self, computer: Computer):
+    def __init__(self, computer: Computer, sensor: SoundSensor):
         super().__init__(computer)
-        self._initialize_related_sensors()
-        self._listen_to_related_sensors()
+        self._initialize_sensor(sensor)
         self._initialize_related_groups()
         self._listen_to_hardware_events()
 
@@ -50,26 +49,13 @@ class SimpleSoundSensorController(AbstractSoundSensorController):
         self._remove_group_from_related(sensor_group)
 
     def on_hardware_event(self, message: AbstractHardwareEvent):
-        if isinstance(message, HardwareConnected):
-            self.on_hardware_connected(message.hardware)
-        elif isinstance(message, HardwareDisconnected):
+        if isinstance(message, HardwareDisconnected):
             self.on_hardware_disconnected(message.hardware)
 
-    def on_hardware_connected(self, hardware):
-        if isinstance(hardware, SoundSensor):
-            self._add_sensor_to_related(hardware)
-            self._start_listening_to_sensor(hardware)
-
-    def _add_sensor_to_related(self, sensor: SoundSensor):
-        self._related_sensors.add(sensor)
-
-    def _remove_sensor_from_related(self, sensor: SoundSensor):
-        self._related_sensors.remove(sensor)
-
     def on_hardware_disconnected(self, hardware):
-        if isinstance(hardware, SoundSensor):
-            self._remove_sensor_from_related(hardware)
+        if hardware == self.sensor:
             self._stop_listening_to_sensor(hardware)
+            self.sensor = None
 
     def on_report_about_received_signal(self, message: ReportAboutReceivedSignal):
         self._notify_related_groups(message)
@@ -91,19 +77,12 @@ class SimpleSoundSensorController(AbstractSoundSensorController):
             )
         )
 
+    def _initialize_sensor(self, sensor: SoundSensor):
+        self.sensor = sensor
+        self._start_listening_to_sensor(sensor)
+
     def _initialize_related_groups(self):
         self._related_groups = set()
-
-    def _initialize_related_sensors(self):
-        self._related_sensors = {
-            sensor for sensor in filter(lambda hardware: isinstance(hardware, SoundSensor),
-                                        self.computer.connected_hardware
-                                        )
-            }
-
-    def _listen_to_related_sensors(self):
-        for sensor in self._related_sensors:
-            self._start_listening_to_sensor(sensor)
 
     def _start_listening_to_sensor(self, sensor: SoundSensor):
         sensor.signal_received_broadcaster.tell(

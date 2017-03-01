@@ -69,12 +69,13 @@ class ComputerLoader(WorldRelatedObjectLoader):
             )
 
         if actor_info['is_active_sensor_controller']:
-            computer.tell(
-                InstallSoftware(
-                    sender=None,
-                    software=SimpleSoundSensorController(computer)
+            for sensor in sensors:
+                computer.tell(
+                    InstallSoftware(
+                        sender=None,
+                        software=SimpleSoundSensorController(computer, sensor)
+                    )
                 )
-            )
         if actor_info['is_active_tdoa_controller']:
             computer.tell(
                 InstallSoftware(
