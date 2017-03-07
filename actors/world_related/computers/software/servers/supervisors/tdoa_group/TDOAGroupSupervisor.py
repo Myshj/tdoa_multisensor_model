@@ -33,6 +33,7 @@ class TDOAGroupSupervisor(Base):
         )
 
     def on_message(self, message: Message):
+        super().on_message(message)
         if isinstance(message, FormGroups):
             print('on_form_groups started')
             self.on_form_groups(sensor_controllers=message.sensor_controllers)

@@ -60,7 +60,7 @@ class TDOA(AbstractLocator):
         :param Position position: Ожидаемая позиция источника звука.
         :return:
         """
-        print(position)
+        # print(position)
         self.sound_source_localized_broadcaster.tell(
             Broadcast(
                 sender=self,

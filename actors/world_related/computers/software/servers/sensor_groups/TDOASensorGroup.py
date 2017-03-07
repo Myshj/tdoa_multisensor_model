@@ -3,14 +3,21 @@ from datetime import datetime, timedelta
 import gevent
 from numpy.linalg import norm
 
+from actor_system.broadcasters.messages.listener_actions import Add
 from actors.world_related.computers import Computer
 from actors.world_related.computers.software.locators.tdoa import TDOA
-from actors.world_related.computers.software.locators.tdoa.messages import Locate
+from actors.world_related.computers.software.locators.tdoa.messages import Locate, SoundSourceLocalized
+from actors.world_related.computers.software.routers.simple import SimpleRouter
+from actors.world_related.computers.software.routers.simple.messages import SendMessageToComputer
 from actors.world_related.computers.software.sensor_controllers.sound_related.simple.messages.group_operations import \
     ReportToThisGroup
+from actors.world_related.computers.software.servers.filters.sound_related.stream_of_position_reports_related.estimated_position_determinators.simple import \
+    SimpleEstimatedPositionDeterminator
 from actors.world_related.computers.software.servers.sensor_groups import AbstractSensorGroup
+from actors.world_related.computers.software.servers.sensor_groups.messages import SensorGroupRecognizedSoundSource
 from actors.world_related.signal_related.sound_related.sensors import SoundSensor
 from actors.world_related.signal_related.sound_related.sensors.messages import ReportAboutReceivedSignal
+from auxillary import Position
 from signals import Sound
 
 
@@ -33,7 +40,12 @@ class TDOASensorGroup(AbstractSensorGroup):
     """
     multiplier_for_max_wait_time = 1.1
 
-    def __init__(self, computer: Computer, sensor_controllers: list):
+    def __init__(
+            self,
+            computer: Computer,
+            sensor_controllers: list,
+            estimated_position_determinator: SimpleEstimatedPositionDeterminator
+    ):
         """
         Конструктор.
         :param computer: Компьютер, на котором установлена программа.
@@ -41,18 +53,23 @@ class TDOASensorGroup(AbstractSensorGroup):
         """
         super().__init__(computer)
         self.sensor_controllers = sensor_controllers
+        self.estimated_position_determinator = estimated_position_determinator
         self._just_received_signal = False
         self._initialize_locator()
+        self._start_listening_to_locator()
         self._initialize_max_wait_time()
         self._listen_for_sensor_signals()
 
     def on_message(self, message):
+        super().on_message(message)
         if isinstance(message, ReportAboutReceivedSignal):
             self.on_sensor_received_signal(
                 signal=message.signal,
                 when_received=message.when,
                 sensor=message.sensor
             )
+        elif isinstance(message, SoundSourceLocalized):
+            self.on_sound_source_localized(message.estimated_position)
 
     def on_sensor_received_signal(self, signal: Sound, when_received: datetime, sensor: SoundSensor):
         """
@@ -70,6 +87,28 @@ class TDOASensorGroup(AbstractSensorGroup):
             sensor=sensor
         )
 
+    def on_sound_source_localized(self, estimated_position: Position):
+        print(estimated_position)
+        self._notify_position_determinator_about_recognized_sound_source(estimated_position)
+
+    def _notify_position_determinator_about_recognized_sound_source(self, estimated_position: Position):
+        router = tuple(
+            router for router in
+            filter(lambda software: isinstance(software, SimpleRouter), self.computer.installed_software)
+        )[0]
+
+        router.tell(
+            SendMessageToComputer(
+                sender=self,
+                message=SensorGroupRecognizedSoundSource(
+                    sender=self,
+                    when_recognized=datetime.now(),
+                    estimated_position=estimated_position
+                ),
+                computer_to=self.estimated_position_determinator.computer
+            )
+        )
+
     def _determine_what_to_do_with_signal(self, signal: Sound, when_received: datetime, sensor: SoundSensor):
         """
         В группе был зафиксирован сигнал. Нужно выяснить, что нам с ним делать.
@@ -84,7 +123,8 @@ class TDOASensorGroup(AbstractSensorGroup):
             self._just_received_signal = True
             gevent.spawn(self._wait_for_max_wait_time)
 
-            # print('Сигнал был сгенерирован: {0}, будет распознан: {1}'.format(when_received, datetime.now() + timedelta(seconds=self._max_wait_time)))
+            print('Сигнал был сгенерирован: {0}, будет распознан: {1}'.format(when_received, datetime.now() + timedelta(
+                seconds=self._max_wait_time)))
         self._last_sensor_report_times[sensor] = when_received
 
     def _wait_for_max_wait_time(self):
@@ -110,16 +150,13 @@ class TDOASensorGroup(AbstractSensorGroup):
         Выдача команды локатору на обнаружение объекта.
         :return:
         """
-        for sensor_controller in self.sensor_controllers:
-            if sensor_controller.sensor not in self._last_sensor_report_times.keys():
-                print('dfdf')
         self.locator.tell(
             Locate(
                 sender=self,
                 time_delays_table={
                     sensor_controller.sensor: (
                         self._last_sensor_report_times[sensor_controller.sensor] - self._last_started_activity_time
-                    # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                        # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                     ).total_seconds()
                     for sensor_controller in self.sensor_controllers
                     }
@@ -158,6 +195,14 @@ class TDOASensorGroup(AbstractSensorGroup):
             world=self.computer.world
         )
 
+    def _start_listening_to_locator(self):
+        self.locator.sound_source_localized_broadcaster.tell(
+            Add(
+                sender=self,
+                actor=self
+            )
+        )
+
     def _listen_for_sensor_signals(self):
         """
         Начать ожидание сигналов от датчиков.
@@ -170,4 +215,4 @@ class TDOASensorGroup(AbstractSensorGroup):
                     sensor_group=self
                 )
             )
-            #sensor_controller.signal_received_broadcaster.tell(AddListener(self, self))
+            # sensor_controller.signal_received_broadcaster.tell(AddListener(self, self))

@@ -80,7 +80,7 @@ if __name__ == '__main__':
         )
         gevent.sleep()
 
-    gevent.sleep(1)
+    gevent.sleep()
 
     sound_source_loader = loaders.SoundSourceLoader(
         url=settings.sound_sources_url,

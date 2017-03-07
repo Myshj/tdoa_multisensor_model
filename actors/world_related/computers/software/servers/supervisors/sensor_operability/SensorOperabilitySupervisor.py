@@ -30,6 +30,7 @@ class SensorOperabilitySupervisor(Base):
         self._listen_to_sensors(sensors)
 
     def on_message(self, message):
+        super().on_message(message)
         if isinstance(message, state_reports.Alive):
             self.on_sensor_alive(message.sensor)
         elif isinstance(message, state_reports.Broken):
