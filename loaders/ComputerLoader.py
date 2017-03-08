@@ -2,6 +2,8 @@ from actors.world_related.computers import Computer
 from actors.world_related.computers.messages.actions.hardware_actions import ConnectHardware
 from actors.world_related.computers.messages.actions.software_actions import InstallSoftware
 from actors.world_related.computers.software.sensor_controllers.sound_related.simple import SimpleSoundSensorController
+from actors.world_related.computers.software.servers.filters.sound_related.stream_of_position_reports_related.estimated_position_determinators.simple import \
+    SimpleEstimatedPositionDeterminator
 from actors.world_related.computers.software.servers.supervisors.tdoa_group import TDOAGroupSupervisor
 from auxillary import Position
 from auxillary import functions
@@ -36,7 +38,8 @@ class ComputerLoader(WorldRelatedObjectLoader):
         'position': str,
         'world': str,
         'is_active_sensor_controller': bool,
-        'is_active_tdoa_controller': bool
+        'is_active_tdoa_controller': bool,
+        'is_active_position_determinator': bool
         }
         :return:
         """
@@ -84,6 +87,19 @@ class ComputerLoader(WorldRelatedObjectLoader):
                 InstallSoftware(
                     sender=None,
                     software=TDOAGroupSupervisor(computer)
+                )
+            )
+            gevent.sleep()
+
+        if actor_info['is_active_position_determinator']:
+            computer.tell(
+                InstallSoftware(
+                    sender=None,
+                    software=SimpleEstimatedPositionDeterminator(
+                        computer=computer,
+                        max_deviation_in_space=20,
+                        time_slot=1
+                    )
                 )
             )
             gevent.sleep()

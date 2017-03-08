@@ -85,6 +85,10 @@ class SoundSource(Base):
                 ))
         )
 
+        print(
+            'Сигнал на позиции {0} был сгенерирован в {1}'.format(self.position, signal.when_generated)
+        )
+
     def _generate_signal(self):
         """
         Генерирует сигнал.

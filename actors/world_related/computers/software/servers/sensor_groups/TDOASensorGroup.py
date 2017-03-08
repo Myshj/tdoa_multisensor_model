@@ -15,6 +15,12 @@ from actors.world_related.computers.software.servers.filters.sound_related.strea
     SimpleEstimatedPositionDeterminator
 from actors.world_related.computers.software.servers.sensor_groups import AbstractSensorGroup
 from actors.world_related.computers.software.servers.sensor_groups.messages import SensorGroupRecognizedSoundSource
+from actors.world_related.computers.software.servers.sensor_groups.messages.position_determinator_operations import \
+    AbstractPositionDeterminatorOperation
+from actors.world_related.computers.software.servers.sensor_groups.messages.position_determinator_operations import \
+    DoNotReportToThisPositionDeterminator
+from actors.world_related.computers.software.servers.sensor_groups.messages.position_determinator_operations import \
+    ReportToThisPositionDeterminator
 from actors.world_related.signal_related.sound_related.sensors import SoundSensor
 from actors.world_related.signal_related.sound_related.sensors.messages import ReportAboutReceivedSignal
 from auxillary import Position
@@ -44,7 +50,7 @@ class TDOASensorGroup(AbstractSensorGroup):
             self,
             computer: Computer,
             sensor_controllers: list,
-            estimated_position_determinator: SimpleEstimatedPositionDeterminator
+            estimated_position_determinators: set
     ):
         """
         Конструктор.
@@ -53,7 +59,7 @@ class TDOASensorGroup(AbstractSensorGroup):
         """
         super().__init__(computer)
         self.sensor_controllers = sensor_controllers
-        self.estimated_position_determinator = estimated_position_determinator
+        self.position_determinators = estimated_position_determinators
         self._just_received_signal = False
         self._initialize_locator()
         self._start_listening_to_locator()
@@ -70,6 +76,29 @@ class TDOASensorGroup(AbstractSensorGroup):
             )
         elif isinstance(message, SoundSourceLocalized):
             self.on_sound_source_localized(message.estimated_position)
+        elif isinstance(message, AbstractPositionDeterminatorOperation):
+            self.on_position_determinator_operation(message)
+
+    def on_position_determinator_operation(self, message: AbstractPositionDeterminatorOperation):
+        if isinstance(message, ReportToThisPositionDeterminator):
+            self.on_report_to_this_position_determinator(message.position_determinator)
+        elif isinstance(message, DoNotReportToThisPositionDeterminator):
+            self.on_do_not_report_to_this_position_determinator(message.position_determinator)
+
+    def on_report_to_this_position_determinator(self, position_determinator: SimpleEstimatedPositionDeterminator):
+        self._add_related_position_determinator(position_determinator)
+
+    def _add_related_position_determinator(self, position_determinator: SimpleEstimatedPositionDeterminator):
+        self.position_determinators.add(position_determinator)
+
+    def on_do_not_report_to_this_position_determinator(
+            self,
+            position_determinator: SimpleEstimatedPositionDeterminator
+    ):
+        self._remove_related_position_determinator(position_determinator)
+
+    def _remove_related_position_determinator(self, position_determinator: SimpleEstimatedPositionDeterminator):
+        self.position_determinators.remove(position_determinator)
 
     def on_sensor_received_signal(self, signal: Sound, when_received: datetime, sensor: SoundSensor):
         """
@@ -88,7 +117,7 @@ class TDOASensorGroup(AbstractSensorGroup):
         )
 
     def on_sound_source_localized(self, estimated_position: Position):
-        print(estimated_position)
+        # print(estimated_position)
         self._notify_position_determinator_about_recognized_sound_source(estimated_position)
 
     def _notify_position_determinator_about_recognized_sound_source(self, estimated_position: Position):
@@ -97,17 +126,20 @@ class TDOASensorGroup(AbstractSensorGroup):
             filter(lambda software: isinstance(software, SimpleRouter), self.computer.installed_software)
         )[0]
 
-        router.tell(
-            SendMessageToComputer(
-                sender=self,
-                message=SensorGroupRecognizedSoundSource(
+        now = datetime.now()
+
+        for position_determinator in self.position_determinators:
+            router.tell(
+                SendMessageToComputer(
                     sender=self,
-                    when_recognized=datetime.now(),
-                    estimated_position=estimated_position
-                ),
-                computer_to=self.estimated_position_determinator.computer
+                    message=SensorGroupRecognizedSoundSource(
+                        sender=self,
+                        when_recognized=now,
+                        estimated_position=estimated_position
+                    ),
+                    computer_to=position_determinator.computer
+                )
             )
-        )
 
     def _determine_what_to_do_with_signal(self, signal: Sound, when_received: datetime, sensor: SoundSensor):
         """
@@ -123,8 +155,8 @@ class TDOASensorGroup(AbstractSensorGroup):
             self._just_received_signal = True
             gevent.spawn(self._wait_for_max_wait_time)
 
-            print('Сигнал был сгенерирован: {0}, будет распознан: {1}'.format(when_received, datetime.now() + timedelta(
-                seconds=self._max_wait_time)))
+            # print('Сигнал был сгенерирован: {0}, будет распознан: {1}'.format(when_received, datetime.now() + timedelta(
+            #     seconds=self._max_wait_time)))
         self._last_sensor_report_times[sensor] = when_received
 
     def _wait_for_max_wait_time(self):

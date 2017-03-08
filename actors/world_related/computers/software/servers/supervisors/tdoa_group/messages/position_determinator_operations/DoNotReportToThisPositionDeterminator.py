@@ -1,0 +1,5 @@
+from .AbstractPositionDeterminatorOperation import AbstractPositionDeterminatorOperation
+
+
+class DoNotReportToThisPositionDeterminator(AbstractPositionDeterminatorOperation):
+    pass

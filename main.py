@@ -1,4 +1,7 @@
 import gevent
+
+from actors.world_related.computers.software.servers.filters.sound_related.stream_of_position_reports_related.estimated_position_determinators.simple import \
+    SimpleEstimatedPositionDeterminator
 from actors.world_related.computers.software.servers.supervisors.sensor_operability import SensorOperabilitySupervisor
 from actors.world_related.computers.software.servers.supervisors.tdoa_group import TDOAGroupSupervisor
 from actors.world_related.computers.software.sensor_controllers.sound_related.simple import SimpleSoundSensorController
@@ -7,6 +10,8 @@ from actors.world_related.computers.messages.actions.software_actions import Ins
 import loaders
 import settings
 from actors.world_related.computers.software.servers.supervisors.tdoa_group.messages import FormGroups
+from actors.world_related.computers.software.servers.supervisors.tdoa_group.messages.position_determinator_operations import \
+    ReportToThisPositionDeterminator
 from actors.world_related.connectors import SoundSourceToPropagatorConnector, \
     SensorSupervisorToTDOAGroupSupervisorConnector
 from actors.world_related.signal_related.sound_related.propagators import SoundPropagator
@@ -124,6 +129,19 @@ if __name__ == '__main__':
         for sensor_controller in filter(lambda software: isinstance(software, SimpleSoundSensorController),
                                         computer.installed_software):
             sensor_controllers.add(sensor_controller)
+
+    position_determinators = set()
+    for computer in computers.values():
+        for determinator in set(
+                filter(
+                    lambda software: isinstance(software, SimpleEstimatedPositionDeterminator),
+                    computer.installed_software
+                )
+        ):
+            position_determinators.add(determinator)
+            group_supervisor.tell(
+                ReportToThisPositionDeterminator(sender=None, position_determinator=determinator)
+            )
 
     group_supervisor.tell(FormGroups(sender=None, sensor_controllers=sensor_controllers))
 
